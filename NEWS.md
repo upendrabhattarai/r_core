@@ -1,6 +1,7 @@
 # bcbioR 0.4.5
 
 Migrate templates to bcbio individual repositories
+Add mm39 rRNA and tRNA annotation
 
 # bcbioR 0.4.4
 
