@@ -1,3 +1,8 @@
+# bcbioR 0.4.5
+
+Migrate templates to bcbio individual repositories
+Add mm39 rRNA and tRNA annotation
+
 # bcbioR 0.4.4
 
 init QC single cell adding init file for params for single QC #123

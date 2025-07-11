@@ -83,9 +83,9 @@ bcbio_templates <- function(type="rnaseq", outpath=NULL, org=NULL){
            #file.copy(fpath, outpath, recursive = T)
            copy_templates(outpath, "spatial", org)
          },
-         chipseq={
+         peakseq={
            #file.copy(fpath, outpath, recursive = T)
-           copy_templates(outpath, "chipseq", org)
+           copy_templates(outpath, "peakseq", org)
          },
          multiomics={
            #file.copy(fpath, outpath, recursive = T)
@@ -93,7 +93,7 @@ bcbio_templates <- function(type="rnaseq", outpath=NULL, org=NULL){
          },
          {
            stop(paste('project type not recognize, please choose: ',
-                      'rnaseq', 'chipseq',
+                      'rnaseq', 'peakseq',
                       'singlecell','singlecell_delux','spatial'))
          }
   )
@@ -220,10 +220,14 @@ copy_templates <- function(path, pipeline, org=NULL){
   }else if(pipeline=="multiomics"){
     parts = c("templates/multiomics")
   }else if(pipeline=="spatial"){
-    parts = c("templates/spatial")
+    # parts = c("templates/spatial")
+    repos = "https://github.com/bcbio/spatial-reports/archive/refs/heads/main.zip"
+    names(repos)="spatial-reports"
     # apps=c(apps, SpatialViz="https://github.com/hbc/RShiny_app-SpatialViz/archive/refs/tags/Latest.zip")
-  }else if(pipeline=="chipseq"){
-    parts = c("templates/chipseq")
+  }else if(pipeline=="peakseq"){
+    # parts = c("templates/chipseq") #https://github.com/bcbio/peakseq-reports
+    repos = "https://github.com/bcbio/peakseq-reports/archive/refs/heads/main.zip"
+    names(repos)="peakseq-reports"
   }
 
   #check if it is url or folder
