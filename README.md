@@ -6,12 +6,37 @@ The goal of `rcore` is to create guidelines for NGS data interpretation based on
 
 ## Installation
 
-You can install the development version of rcore from [GitHub](https://github.com/) with:
+Install the package directly from GitHub:
 
-```         
-# install.packages("devtools")
-devtools::install_github("bcbio/rcore")
-devtools::install_github("bcbio/rcore",ref = "devel")
+```r
+# Option 1 — remotes (most common)
+install.packages("remotes")
+remotes::install_github("upendrabhattarai/r_core")
+
+# Option 2 — pak (faster, handles dependencies better)
+install.packages("pak")
+pak::pkg_install("upendrabhattarai/r_core")
+```
+
+Then install the dependencies for the analysis type you need:
+
+```r
+library(rcore)
+
+rcore::install_rcore_deps("rnaseq")       # RNA-seq templates
+rcore::install_rcore_deps("chipseq")      # ChIP-seq templates
+rcore::install_rcore_deps("singlecell")   # Single-cell RNA-seq templates
+rcore::install_rcore_deps("spatial")      # Spatial transcriptomics templates
+rcore::install_rcore_deps("methylation")  # Methylation templates
+rcore::install_rcore_deps("multiomics")   # Multi-omics templates
+rcore::install_rcore_deps("cellchat")     # Cell-cell communication templates
+rcore::install_rcore_deps("all")          # Everything (takes a while)
+```
+
+`install_rcore_deps()` handles CRAN, Bioconductor, and GitHub-only packages automatically and skips anything already installed. To see what each type needs before installing:
+
+```r
+rcore::list_rcore_deps()
 ```
 
 ## Quick start
@@ -69,7 +94,7 @@ bcbio_templates(type="rnaseq", outpath="/path/to/analysis/folder/reports")
 
 ### Discover more…
 
-Go to the vignette to know more `vignette("bcbioR_quick_start", package="rcore")`
+Go to the vignette to know more `vignette("rcore_quick_start", package="rcore")`
 
 ## How to Contribute
 
