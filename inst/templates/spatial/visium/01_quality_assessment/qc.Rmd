@@ -6,11 +6,12 @@ output:
    html_document:
       code_folding: hide
       df_print: paged
-      highlights: pygments
+      highlight: pygments
       number_sections: false
       self_contained: true
-      theme: default
+      theme: cosmo
       toc: true
+      toc_depth: 3
       toc_float:
          collapsed: true
          smooth_scroll: true
@@ -56,6 +57,9 @@ stopifnot(compareVersion(as.character(BiocManager::version()), "3.16")>=0)
 stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.1")>=0)
 ```
 
+```{r bcbio-css, echo=FALSE, results='asis'}
+bcbioR::bcbio_inject_css()
+```
 
 
 ```{r load_libraries, cache = FALSE, message = FALSE, warning=FALSE, echo=FALSE,}
@@ -66,32 +70,37 @@ library(qs)
 library(dplyr)
 library(purrr)
 library(ggplot2)
-library(ggprism)
-library(grafify)
 library(ggpubr)
 library(gridExtra)
 library(scales)
 library(Seurat)
 
-import::from(magrittr,set_colnames,set_rownames,"%<>%")
+import::from(magrittr, set_colnames, set_rownames, "%<>%")
 
-invisible(list2env(params,environment()))
+invisible(list2env(params, environment()))
 source(project_file)
 
-ggplot2::theme_set(theme_prism(base_size = 12))
-# https://grafify-vignettes.netlify.app/colour_palettes.html
-# NOTE change colors here if you wish
-scale_colour_discrete <- function(...)
-  scale_colour_manual(..., 
-                      values = as.vector(grafify:::graf_palettes[["kelly"]]))
-scale_fill_discrete <- function(...)
-  scale_fill_manual(..., 
-                      values = as.vector(grafify:::graf_palettes[["kelly"]]))
+# ---- Global ggplot2 theme & colour scales ----
+ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
 
-opts_chunk[["set"]](
-    cache = F,
-    cache.lazy = FALSE,
-    dev = c("png", "pdf"),
+# ---- Global knitr options ----
+knitr::opts_chunk$set(
+  cache      = FALSE,
+  cache.lazy = FALSE,
+  dev        = c("png", "pdf"),
+  dpi        = 150,
+  error      = TRUE,
+  echo       = TRUE,
+  fig.align  = "center",
+  fig.height = 5,
+  fig.retina = 2,
+  fig.width  = 9.6,
+  message    = FALSE,
+  tidy       = FALSE,
+  warning    = FALSE
+)
     error = TRUE,
     highlight = TRUE,
     message = FALSE,
@@ -101,8 +110,28 @@ opts_chunk[["set"]](
     echo = T, 
     fig.height = 4)
 
-# set seed for reproducibility
-set.seed(1234567890L)
+
+# ---- Global ggplot2 theme & colour scales ----
+ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
+
+# ---- Global knitr options ----
+knitr::opts_chunk$set(
+  cache      = FALSE,
+  cache.lazy = FALSE,
+  dev        = c("png", "pdf"),
+  dpi        = 150,
+  error      = TRUE,
+  echo       = TRUE,
+  fig.align  = "center",
+  fig.height = 5,
+  fig.retina = 2,
+  fig.width  = 9.6,
+  message    = FALSE,
+  tidy       = FALSE,
+  warning    = FALSE
+)
 ```
 
 ## Project details

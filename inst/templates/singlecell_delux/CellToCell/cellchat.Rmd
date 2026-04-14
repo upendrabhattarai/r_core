@@ -4,16 +4,17 @@ author: "Harvard Chan Bioinformatics Core"
 date: "`r Sys.Date()`"
 output:
   html_document:
-  code_folding: hide
-  df_print: paged
-  highlights: pygments
-  number_sections: false
-  self_contained: true
-  theme: default
-  toc: true
-  toc_float:
-    collapsed: true
-    smooth_scroll: true
+    code_folding: hide
+    df_print: paged
+    highlight: pygments
+    number_sections: false
+    self_contained: true
+    theme: cosmo
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: true
+      smooth_scroll: true
 params:
   project_file: information.R
   seurat_fn: ../data/fDat_sn_RC.rds
@@ -34,6 +35,11 @@ stopifnot(compareVersion(as.character(BiocManager::version()), "3.18")>=0)
 stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.0.0")>=0)
 ```
 
+```{r bcbio-css, echo=FALSE, results='asis'}
+bcbioR::bcbio_inject_css()
+```
+
+
 This code is in this ![](https://img.shields.io/badge/status-draft-grey) revision.
 
 ```{r load_libraries, cache = FALSE, message = FALSE, warning=FALSE, echo=FALSE}
@@ -44,6 +50,28 @@ Sys.getenv("PYTHONPATH") # should be empty
 
 current_libs <- .libPaths()
 .libPaths(c('/n/app/bcbio/R4.3.1_cellchat/', current_libs))
+
+# ---- Global ggplot2 theme & colour scales ----
+ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
+
+# ---- Global knitr options ----
+knitr::opts_chunk$set(
+  cache      = FALSE,
+  cache.lazy = FALSE,
+  dev        = c("png", "pdf"),
+  dpi        = 150,
+  error      = TRUE,
+  echo       = TRUE,
+  fig.align  = "center",
+  fig.height = 5,
+  fig.retina = 2,
+  fig.width  = 9.6,
+  message    = FALSE,
+  tidy       = FALSE,
+  warning    = FALSE
+)
 ```
 
 ```{r}
@@ -52,7 +80,6 @@ library(CellChat)
 library(tidyverse)
 library(Seurat)
 library(bcbioR)
-library(ggprism)
 library(knitr)
 library(tools)
 library(qs)
@@ -61,12 +88,8 @@ library(ComplexHeatmap)
 
 options(stringsAsFactors = FALSE)
 
-colors=cb_friendly_cols(1:15)
-ggplot2::theme_set(theme_prism(base_size = 14))
-opts_chunk[["set"]](
-    cache = F,
-    cache.lazy = FALSE,
-    dev = c("png", "pdf"),
+
+,
     error = TRUE,
     highlight = TRUE,
     message = FALSE,
@@ -76,8 +99,6 @@ opts_chunk[["set"]](
     echo = T, 
     fig.height = 4)
 
-# set seed for reproducibility
-set.seed(1234567890L)
 
 cellchat_ran <- file.exists(params$cellchat_fn)
 cellchat_rejection_ran <- file.exists(params$cellchat_grade2_fn) & file.exists(params$cellchat_grade0_fn)

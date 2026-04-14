@@ -6,11 +6,12 @@ output:
    html_document:
       code_folding: hide
       df_print: paged
-      highlights: pygments
+      highlight: pygments
       number_sections: true
       self_contained: true
-      theme: default
+      theme: cosmo
       toc: true
+      toc_depth: 3
       toc_float:
          collapsed: true
          smooth_scroll: true
@@ -39,10 +40,12 @@ stopifnot(compareVersion(as.character(BiocManager::version()), "3.18")>=0)
 stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.0.0")>=0)
 ```
 
+```{r bcbio-css, echo=FALSE, results='asis'}
+bcbioR::bcbio_inject_css()
+```
+
 ```{r setup, cache=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-# Load libraries'
-#library(Matrix)
+# Load libraries
 library(SeuratObject)
 library(Seurat)
 library(harmony)
@@ -52,8 +55,6 @@ library(data.table)
 library(DT)
 library(patchwork)
 library(clustree)
-library(ggprism)
-library(grafify)
 library(R.utils)
 library(tidyverse)
 library(DESeq2)
@@ -62,35 +63,31 @@ library(EnhancedVolcano)
 library(pheatmap)
 library(viridis)
 library(caTools)
-library(shiny)
-#library(future)
+library(bcbioR)
 
-ggplot2::theme_set(theme_prism(base_size = 12))
-# https://grafify-vignettes.netlify.app/colour_palettes.html
-# NOTE change colors here if you wish
-scale_colour_discrete <- function(...)
-  scale_colour_manual(..., values = as.vector(grafify:::graf_palettes[["kelly"]]))
-scale_fill_discrete <- function(...)
-  scale_fill_manual(..., values = as.vector(grafify:::graf_palettes[["kelly"]]))
+# ---- Global ggplot2 theme & colour scales ----
+ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
 
-#options(ggplot2.discrete.colour= )
-
-# Set seed for reproducibility
-set.seed(1454944673L)
-opts_chunk[["set"]](
-    audodep = TRUE,
-    cache = FALSE,
-    cache.lazy = FALSE,
-    error = TRUE,
-    echo = TRUE,
-    warning = FALSE,
-    fig.height = 5L,
-    fig.retina = 2L,
-    fig.width = 9.6,
-    message = FALSE,
-    tidy = TRUE,
-    warning = TRUE
+# ---- Global knitr options ----
+knitr::opts_chunk$set(
+  cache      = FALSE,
+  cache.lazy = FALSE,
+  dev        = c("png", "pdf"),
+  dpi        = 150,
+  error      = TRUE,
+  echo       = TRUE,
+  fig.align  = "center",
+  fig.height = 5,
+  fig.retina = 2,
+  fig.width  = 9.6,
+  message    = FALSE,
+  tidy       = FALSE,
+  warning    = FALSE
 )
+
+set.seed(1454944673L)
 
 source(params$project_file)
 
@@ -223,7 +220,6 @@ Before moving on to a pseudobulk DGE analysis, it is important to identify how m
 ```{r}
 ggplot(bulk_touse@meta.data, aes(x=orig.ident, y=n_cells)) +
     geom_bar(stat="identity", color="black", aes(fill=.data[[column]])) +
-    theme_classic() +
     theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
     labs(x="Sample name", y="Number of cells") +
     geom_text(aes(label=n_cells), vjust=-0.5)

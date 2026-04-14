@@ -6,12 +6,13 @@ output:
    html_document:
       code_folding: hide
       df_print: paged
-      highlights: pygments
+      highlight: pygments
       number_sections: true
       self_contained: true
-      theme: default
+      theme: cosmo
       eval: false
       toc: true
+      toc_depth: 3
       toc_float:
          collapsed: true
          smooth_scroll: true
@@ -40,41 +41,48 @@ stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.0.0")>=0)
 ```
 
 
-```{r setup, cache=FALSE,message=FALSE,echo=FALSE,eval=T}
-# Load libraries'
+```{r bcbio-css, echo=FALSE, results='asis'}
+bcbioR::bcbio_inject_css()
+```
+
+```{r setup, cache=FALSE, message=FALSE, echo=FALSE, eval=T}
+# Load libraries
 library(Seurat)
 library(tidyverse)
 library(data.table)
-library(ggprism)
 library(knitr)
+library(bcbioR)
 library(EnhancedVolcano)
 library(pheatmap)
 library(viridisLite)
 library(viridis)
 library(ggpubr)
 
+# ---- Global ggplot2 theme & colour scales ----
+ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
 
-ggplot2::theme_set(theme_prism(base_size = 12))
-scale_colour_discrete <- function(...)
-  scale_colour_manual(..., values = as.vector(grafify:::graf_palettes[["kelly"]]))
-
-set.seed(1454944673L)
-opts_chunk[["set"]](
-    audodep = TRUE,
-    cache = FALSE,
-    cache.lazy = FALSE,
-    error = TRUE,
-    echo = F,
-    eval=F,
-    fig.height = 6,
-    fig.retina = 2L,
-    fig.width = 6,
-    message = FALSE,
-    tidy = F,
-    warning = F
+# ---- Global knitr options ----
+knitr::opts_chunk$set(
+  cache      = FALSE,
+  cache.lazy = FALSE,
+  dev        = c("png", "pdf"),
+  dpi        = 150,
+  error      = TRUE,
+  echo       = TRUE,
+  fig.align  = "center",
+  fig.height = 5,
+  fig.retina = 2,
+  fig.width  = 9.6,
+  message    = FALSE,
+  tidy       = FALSE,
+  warning    = FALSE
 )
 
-invisible(list2env(params,environment()))
+set.seed(1454944673L)
+
+invisible(list2env(params, environment()))
 source(project_file)
 grpmean <- function(grp,mat){
   if(ncol(mat)==length(grp)){
@@ -109,7 +117,6 @@ This code is in this ![](https://img.shields.io/badge/status-alpha-yellow) revis
 -   Analyst: `r analyst`
 -   Experiment: `r experiment`
 -   Aim: `r aim`
-
 
 
 # MAST analysis 
@@ -189,7 +196,6 @@ p1 <- pheatmap(grp_mean,
 print(p1)
 cat("\n\n")
 ```
-
 
 
 ## Volcano plot and Top DEG {.tabset}
@@ -282,7 +288,6 @@ for (g in top_DEG){
 ```
 
 
-
 ## Colored sc-expression across contrast groups: top `r topn` DEGs {.tabset}
 
 ```{r sc-expr for all DEG2,fig.height=5,fig.width=10,eval=T,results='asis'}
@@ -372,7 +377,6 @@ p1 <- ggplot(top_n_exp, aes_string(x = "contrast_grp", y = g)) +
 print(p1)
 cat("\n\n")
 ```
-
 
 
 # Method description

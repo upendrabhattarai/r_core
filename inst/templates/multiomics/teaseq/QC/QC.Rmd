@@ -7,11 +7,12 @@ output:
    html_document:
       code_folding: hide
       df_print: paged
-      highlights: pygments
+      highlight: pygments
       number_sections: true
       self_contained: true
-      theme: default
+      theme: cosmo
       toc: true
+      toc_depth: 3
       toc_float:
          collapsed: true
          smooth_scroll: true
@@ -48,26 +49,15 @@ output:
         self_contained: true
         theme: paper
         toc: true
+      toc_depth: 3
         toc_float:
             collapsed: true
             smooth_scroll: false
 ---
 
 ```{r render}
-# Set seed for reproducibility
-set.seed(1454944673L)
 library(knitr)
-opts_chunk[["set"]](
-    audodep = TRUE,
-    cache = FALSE,
-    cache.lazy = FALSE,
-    error = TRUE,
-    fig.height = 6L,
-    fig.width = 6L,
-    message = FALSE,
-    tidy = TRUE,
-    warning = FALSE
-)
+
 ```
 
 ```{r, cache = FALSE, message = FALSE, warning=FALSE}
@@ -80,6 +70,11 @@ stopifnot(R.version$major>= 4) # requires R4
 stopifnot(compareVersion(R.version$minor,"3.3")>=0) # requires >=4.3.3
 stopifnot(compareVersion(as.character(BiocManager::version()), "3.18")>=0)
 ```
+
+```{r bcbio-css, echo=FALSE, results='asis'}
+bcbioR::bcbio_inject_css()
+```
+
 
 This code is in this ![](https://img.shields.io/badge/status-draft-grey) revision.
 
@@ -97,13 +92,34 @@ library(Signac)
 library(EnsDb.Hsapiens.v86)
 library(qs)
 library(bcbioR)
+
 invisible(mapply(
-    FUN = dir.create,
-    path = c(params$data_dir, params$results_dir),
-    MoreArgs = list(showWarnings = FALSE, recursive = TRUE)
+  FUN = dir.create,
+  path = c(params$data_dir, params$results_dir),
+  MoreArgs = list(showWarnings = FALSE, recursive = TRUE)
 ))
 
-ggplot2::theme_set(theme_light(base_size = 14))
+# ---- Global ggplot2 theme & colour scales ----
+ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
+
+# ---- Global knitr options ----
+knitr::opts_chunk$set(
+  cache      = FALSE,
+  cache.lazy = FALSE,
+  dev        = c("png", "pdf"),
+  dpi        = 150,
+  error      = TRUE,
+  echo       = TRUE,
+  fig.align  = "center",
+  fig.height = 5,
+  fig.retina = 2,
+  fig.width  = 9.6,
+  message    = FALSE,
+  tidy       = FALSE,
+  warning    = FALSE
+)
 ```
 
 
@@ -431,7 +447,6 @@ cat('\n\n')
 ```
 
 
-
 # ATAC-Seq {.tabset}
 
 We use some of the results from cellranger outputs and the peaks called using MACS2 for QCing the scATAC-Seq data. 
@@ -554,8 +569,6 @@ VlnPlot(
 ) +   scale_fill_cb_friendly() +
 NoLegend() + xlab("")
 ```
-
-
 
 
 ### Blacklist ratio

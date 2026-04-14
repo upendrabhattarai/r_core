@@ -6,11 +6,12 @@ output:
    html_document:
       code_folding: hide
       df_print: paged
-      highlights: pygments
+      highlight: pygments
       number_sections: true
       self_contained: true
-      theme: default
+      theme: cosmo
       toc: true
+      toc_depth: 3
       toc_float:
          collapsed: true
          smooth_scroll: true
@@ -41,6 +42,11 @@ stopifnot(compareVersion(as.character(BiocManager::version()), "3.18")>=0)
 stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.0.0")>=0)
 ```
 
+```{r bcbio-css, echo=FALSE, results='asis'}
+bcbioR::bcbio_inject_css()
+```
+
+
 This code is in this ![](https://img.shields.io/badge/status-alpha-yellow) revision.
 
 ```{r source_params, echo = F}
@@ -58,11 +64,8 @@ library(cowplot)
 library(kableExtra)
 library(qs)
 library(bcbioR)
-ggplot2::theme_set(theme_light(base_size = 14))
-opts_chunk[["set"]](
-    cache = FALSE,
-    cache.lazy = FALSE,
-    dev = c("png", "pdf"),
+
+,
     error = TRUE,
     highlight = TRUE,
     message = FALSE,
@@ -70,6 +73,28 @@ opts_chunk[["set"]](
     tidy = FALSE,
     warning = FALSE,
     fig.height = 4)
+
+# ---- Global ggplot2 theme & colour scales ----
+ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
+
+# ---- Global knitr options ----
+knitr::opts_chunk$set(
+  cache      = FALSE,
+  cache.lazy = FALSE,
+  dev        = c("png", "pdf"),
+  dpi        = 150,
+  error      = TRUE,
+  echo       = TRUE,
+  fig.align  = "center",
+  fig.height = 5,
+  fig.retina = 2,
+  fig.width  = 9.6,
+  message    = FALSE,
+  tidy       = FALSE,
+  warning    = FALSE
+)
 ```
 
 
@@ -307,8 +332,6 @@ NoLegend() + xlab("")
 ```
 
 
-
-
 ### Blacklist ratio
 
 tIt's he ratio of reads in genomic blacklist regions. The [ENCODE project](https://www.encodeproject.org/) has provided a list of [blacklist regions](https://github.com/Boyle-Lab/Blacklist), representing reads which are often associated with artefactual signal. Cells with a high proportion of reads mapping to these areas (compared to reads mapping to peaks) often represent technical artifacts and should be removed. ENCODE blacklist regions for human (hg19 and GRCh38), mouse (mm10), Drosophila (dm3), and C. elegans (ce10) are included in the Signac package. **Peaks overlapping with the balcklist regions were removed in the analysis, so we don't show blacklist fraction here**.
@@ -355,7 +378,6 @@ cat('\n\n')
 ```
 
 <!-- # {.unlisted .unnumbered} -->
-
 
 
 # R session

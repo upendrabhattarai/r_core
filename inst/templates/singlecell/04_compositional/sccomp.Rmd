@@ -6,11 +6,12 @@ output:
    html_document:
       code_folding: hide
       df_print: paged
-      highlights: pygments
+      highlight: pygments
       number_sections: true
       self_contained: true
-      theme: default
+      theme: cosmo
       toc: true
+      toc_depth: 3
       toc_float:
          collapsed: true
          smooth_scroll: true
@@ -34,55 +35,56 @@ stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.0.0")>=0)
 This code is in this ![](https://img.shields.io/badge/status-draft-grey) revision.
 
 
+```{r bcbio-css, echo=FALSE, results='asis'}
+bcbioR::bcbio_inject_css()
+```
+
 ```{r setup, cache=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
-#knitr::opts_chunk$set(echo = TRUE)
-library(knitr)
 # Load libraries
+library(knitr)
 library(Seurat)
 library(sccomp)
 library(SummarizedExperiment)
 library(SingleCellExperiment)
 library(DEGreport)
-
 library(rmarkdown)
 library(tidyverse)
 library(data.table)
 library(DT)
 library(patchwork)
 library(pheatmap)
-
-library(ggprism)
-library(grafify)
-
 library(future)
+library(bcbioR)
 
-set.seed(1454944673L)
-opts_chunk[["set"]](
-    audodep = TRUE,
-    cache = FALSE,
-    cache.lazy = FALSE,
-    error = TRUE,
-    echo = FALSE,
-    fig.height = 5L,
-    fig.retina = 2L,
-    fig.width = 11,
-    message = FALSE,
-    tidy = TRUE,
-    warning = FALSE
+# ---- Global ggplot2 theme & colour scales ----
+ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
+
+# ---- Global knitr options ----
+knitr::opts_chunk$set(
+  cache      = FALSE,
+  cache.lazy = FALSE,
+  dev        = c("png", "pdf"),
+  dpi        = 150,
+  error      = TRUE,
+  echo       = TRUE,
+  fig.align  = "center",
+  fig.height = 5,
+  fig.retina = 2,
+  fig.width  = 9.6,
+  message    = FALSE,
+  tidy       = FALSE,
+  warning    = FALSE
 )
 
-ggplot2::theme_set(theme_prism(base_size = 12))
-# https://grafify-vignettes.netlify.app/colour_palettes.html
-# NOTE change colors here if you wish
-scale_colour_discrete <- function(...)
-  scale_colour_manual(..., values = as.vector(grafify:::graf_palettes[["kelly"]]))
+set.seed(1454944673L)
 
-
- if (future::supportsMulticore()) {
-   future::plan(future::multicore)
- } else {
-   future::plan(future::multisession)
- }
+if (future::supportsMulticore()) {
+  future::plan(future::multicore)
+} else {
+  future::plan(future::multisession)
+}
 ```
 
 

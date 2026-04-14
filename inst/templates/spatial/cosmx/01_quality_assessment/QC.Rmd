@@ -6,11 +6,12 @@ output:
    html_document:
       code_folding: hide
       df_print: paged
-      highlights: pygments
+      highlight: pygments
       number_sections: false
       self_contained: true
-      theme: default
+      theme: cosmo
       toc: true
+      toc_depth: 3
       toc_float:
          collapsed: true
          smooth_scroll: true
@@ -36,6 +37,11 @@ stopifnot(compareVersion(as.character(BiocManager::version()), "3.18")>=0)
 stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.0.0")>=0)
 ```
 
+```{r bcbio-css, echo=FALSE, results='asis'}
+bcbioR::bcbio_inject_css()
+```
+
+
 This code is in this ![](https://img.shields.io/badge/status-draft-grey) revision.
 
 ```{r load_params, echo = F}
@@ -47,17 +53,12 @@ source(params$project_file)
 library(tidyverse)
 library(Seurat)
 library(bcbioR)
-library(ggprism)
 library(knitr)
 library(tools)
 library(qs)
 
-colors=cb_friendly_cols(1:15)
-ggplot2::theme_set(theme_prism(base_size = 14))
-opts_chunk[["set"]](
-    cache = F,
-    cache.lazy = FALSE,
-    dev = c("png", "pdf"),
+
+,
     error = TRUE,
     highlight = TRUE,
     message = FALSE,
@@ -67,8 +68,28 @@ opts_chunk[["set"]](
     echo = T, 
     fig.height = 4)
 
-# set seed for reproducibility
-set.seed(1234567890L)
+
+# ---- Global ggplot2 theme & colour scales ----
+ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
+
+# ---- Global knitr options ----
+knitr::opts_chunk$set(
+  cache      = FALSE,
+  cache.lazy = FALSE,
+  dev        = c("png", "pdf"),
+  dpi        = 150,
+  error      = TRUE,
+  echo       = TRUE,
+  fig.align  = "center",
+  fig.height = 5,
+  fig.retina = 2,
+  fig.width  = 9.6,
+  message    = FALSE,
+  tidy       = FALSE,
+  warning    = FALSE
+)
 ```
 
 ```{r sanitize_datatable}

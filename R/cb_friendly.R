@@ -1,100 +1,149 @@
-#' list of colorblind-friendly colors, developed by James and client
+# bcbioR colorblind-friendly palette
+# Redesigned with teal, rose/pink, and complementary accent colours.
+# All hues are distinguishable for the most common forms of colour-blindness
+# (deuteranopia / protanopia) because the palette relies on blue-teal vs
+# pink-coral contrast rather than red vs green contrast.
+
 cb_friendly_colors <- c(
-  `blue`            = "#2759F6",
-  `light_orange`    = "#FFD37D",
-  `olive_green`     = "olivedrab3",
-  `purple`          = "#9176C8",
-  `pink`            = "#E93380",
-  `sky_blue`        = "#4FAEEB",
-  `blue_grey`       = "#92A6BC",
-  `forest_green`    = "#3C877B",
-  `yellow`          = "yellow",
-  `dark_purple`     = "#402999",
-  `dark_orange`     = "#D5392C",
-  `army_green`      = "#C3C380",
-  `black`           = "black",
-  `dark_grey`       = "darkgrey",
-  `light_blue`      = "lightblue",
-  `brown`           = "#661100",
-  `white`           = "white"
+  # ---- Teals ----
+  `deep_teal`    = "#006B6B",   # rich, dark teal
+  `teal`         = "#0D9488",   # main brand teal
+  `light_teal`   = "#5EEAD4",   # mint / light teal
+
+  # ---- Pinks & roses ----
+  `deep_rose`    = "#BE185D",   # deep rose / fuchsia
+  `hot_pink`     = "#EC4899",   # vibrant hot pink
+  `blush`        = "#F9A8D4",   # soft blush
+
+  # ---- Purples & blues ----
+  `indigo`       = "#4F46E5",   # rich indigo
+  `lavender`     = "#A78BFA",   # soft lavender
+  `sky`          = "#38BDF8",   # bright sky blue
+
+  # ---- Warm accents ----
+  `amber`        = "#F59E0B",   # warm amber / gold
+  `coral`        = "#FB7185",   # coral (bridges pink & warm)
+  `sand`         = "#D97706",   # dark amber / sand
+
+  # ---- Greens & neutrals ----
+  `forest`       = "#059669",   # forest green
+  `charcoal`     = "#374151",   # near-black
+  `steel`        = "#94A3B8",   # blue-grey steel
+  `white`        = "#FFFFFF"
 )
 
-#' list cb friendly colors
+#' List all bcbioR colorblind-friendly colours
+#'
+#' Returns a named character vector of all available colours and their hex codes.
+#'
 #' @export
-list_cb_friendly_cols <- function(){
+list_cb_friendly_cols <- function() {
   return(cb_friendly_colors)
 }
 
-#' fetch color from list by name
+#' Fetch one or more colours by name
 #'
-#' @param ... list of color names
+#' @param ... One or more colour names (unquoted or quoted strings).
+#'   Use [list_cb_friendly_cols()] to see all available names.
 #'
+#' @return Named character vector of hex colour codes.
 #' @export
 cb_friendly_cols <- function(...) {
   cols <- c(...)
-
   if (is.null(cols))
-    return (cb_friendly_colors)
-
+    return(cb_friendly_colors)
   cb_friendly_colors[cols]
 }
 
-#' define main colorblind-friendly palette as well as sub-palettes
+# ---- Named palettes ------------------------------------------------------------
+
 cb_friendly_palettes <- list(
-  `main`  = cb_friendly_cols("blue", "purple", "sky_blue",
-                               "blue_grey", "forest_green", "pink", "olive_green",
-                               "yellow", "dark_purple", "dark_orange",
-                               "army_green", "black", "dark_grey", "light_blue",
-                               "brown","light_orange"),
-  `cool`  = cb_friendly_cols("blue", "dark_purple", "purple", "sky_blue"),
-  `hot`   = cb_friendly_cols("yellow", "light_orange", "dark_orange"),
-  `grey`  = cb_friendly_cols("black", "dark_grey", "blue_grey"),
-  `heatmap` = cb_friendly_cols("blue", "white", "brown"),
-  `white_to_blue` = cb_friendly_cols('white', 'blue')
+  # General-purpose: covers all 16 hues in a visually balanced order
+  `main` = cb_friendly_cols(
+    "teal", "hot_pink", "indigo", "amber",
+    "coral", "lavender", "sky", "deep_rose",
+    "forest", "sand", "light_teal", "charcoal",
+    "steel", "blush", "deep_teal"
+  ),
+
+  # Cool blues & teals
+  `teal` = cb_friendly_cols("deep_teal", "teal", "light_teal", "sky"),
+
+  # Pinks & roses
+  `rose` = cb_friendly_cols("deep_rose", "hot_pink", "coral", "blush"),
+
+  # Cool purples & blues
+  `cool` = cb_friendly_cols("indigo", "lavender", "deep_teal", "sky"),
+
+  # Warm ambers & corals
+  `warm` = cb_friendly_cols("amber", "coral", "sand", "hot_pink"),
+
+  # Greyscale-ish neutrals
+  `grey` = cb_friendly_cols("charcoal", "steel", "light_teal"),
+
+  # Diverging heatmap: rose → white → teal
+  `heatmap` = cb_friendly_cols("deep_rose", "white", "deep_teal"),
+
+  # Sequential: white → teal
+  `white_to_teal` = cb_friendly_cols("white", "teal")
 )
 
-#' access cb friendly palette by name, reversing if necessary
+#' Build a colour-ramp palette function
 #'
-#' @param palette name of the palette to be returned (main, cool, hot, grey, white_to_blue, or heatmap)
-#' @param reverse boolean, reverse order of colors in palette
-#' @param ... pass to ggplot
+#' @param palette Name of the palette: `"main"` (default), `"teal"`, `"rose"`,
+#'   `"cool"`, `"warm"`, `"grey"`, `"heatmap"`, or `"white_to_teal"`.
+#' @param reverse Logical; reverse the colour order? Default `FALSE`.
+#' @param ... Passed to [grDevices::colorRampPalette()].
+#'
+#' @return A colour-ramp function (as returned by [grDevices::colorRampPalette()]).
 #' @export
-cb_friendly_pal <-function(palette = 'main', reverse = F, ...){
+cb_friendly_pal <- function(palette = "main", reverse = FALSE, ...) {
   pal <- cb_friendly_palettes[[palette]]
+  if (is.null(pal))
+    stop("Unknown palette '", palette, "'. ",
+         "Choose from: ", paste(names(cb_friendly_palettes), collapse = ", "))
   if (reverse) pal <- rev(pal)
   colorRampPalette(pal, ...)
 }
 
-#' use cb friendly colors as color aesthetic with ggplot
+#' ggplot2 colour scale using bcbioR palette
 #'
-#' @param palette name of the palette to be returned (main, cool, hot, grey, white_to_blue, or heatmap)
-#' @param discrete boolean, whether to make palette discretely divided into colors or continuous
-#' @param reverse boolean, reverse order of colors in palette
-#' @param ... pass to ggplot
+#' @param palette See [cb_friendly_pal()].
+#' @param discrete Logical; discrete (`TRUE`, default) or continuous scale?
+#' @param reverse Logical; reverse colour order? Default `FALSE`.
+#' @param ... Passed to [ggplot2::discrete_scale()] or
+#'   [ggplot2::scale_color_gradientn()].
+#'
 #' @export
-scale_color_cb_friendly <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
+scale_color_cb_friendly <- function(palette = "main", discrete = TRUE,
+                                    reverse = FALSE, ...) {
   pal <- cb_friendly_pal(palette = palette, reverse = reverse)
-
   if (discrete) {
-    discrete_scale("colour", paste0("cb_friendly_", palette), palette = pal, ...)
+    ggplot2::discrete_scale("colour",
+                            paste0("cb_friendly_", palette),
+                            palette = pal, ...)
   } else {
-    scale_color_gradientn(colours = pal(256), ...)
+    ggplot2::scale_color_gradientn(colours = pal(256), ...)
   }
 }
 
-#' use cb friendly colors as fill aesthetic with ggplot
+#' ggplot2 fill scale using bcbioR palette
 #'
-#' @param palette name of the palette to be returned (main, cool, hot, grey, white_to_blue, or heatmap)
-#' @param discrete boolean, whether to make palette discretely divided into colors or continuous
-#' @param reverse boolean, reverse order of colors in palette
-#' @param ... pass to ggplot
+#' @param palette See [cb_friendly_pal()].
+#' @param discrete Logical; discrete (`TRUE`, default) or continuous scale?
+#' @param reverse Logical; reverse colour order? Default `FALSE`.
+#' @param ... Passed to [ggplot2::discrete_scale()] or
+#'   [ggplot2::scale_fill_gradientn()].
+#'
 #' @export
-scale_fill_cb_friendly <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
+scale_fill_cb_friendly <- function(palette = "main", discrete = TRUE,
+                                   reverse = FALSE, ...) {
   pal <- cb_friendly_pal(palette = palette, reverse = reverse)
-
   if (discrete) {
-    discrete_scale("fill", paste0("cb_friendly_", palette), palette = pal, ...)
+    ggplot2::discrete_scale("fill",
+                            paste0("cb_friendly_", palette),
+                            palette = pal, ...)
   } else {
-    scale_fill_gradientn(colours = pal(256), ...)
+    ggplot2::scale_fill_gradientn(colours = pal(256), ...)
   }
 }

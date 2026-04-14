@@ -6,11 +6,12 @@ output:
    html_document:
       code_folding: hide
       df_print: paged
-      highlights: pygments
+      highlight: pygments
       number_sections: true
       self_contained: true
-      theme: default
+      theme: cosmo
       toc: true
+      toc_depth: 3
       toc_float:
          collapsed: true
          smooth_scroll: true
@@ -59,14 +60,17 @@ source(params$functions_file)
 -   Experiment: `r experiment`
 
 
-```{r load_libraries, cache = FALSE, message = FALSE, warning=FALSE}
+```{r bcbio-css, echo=FALSE, results='asis'}
+bcbioR::bcbio_inject_css()
+```
+
+```{r load_libraries, cache=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(knitr)
 library(rtracklayer)
 library(DESeq2)
 library(DEGreport)
 library(ggrepel)
-# library(RColorBrewer)
 library(DT)
 library(pheatmap)
 library(bcbioR)
@@ -76,19 +80,34 @@ library(UpSetR)
 library(httr)
 library(jsonlite)
 
-colors=cb_friendly_cols(1:15)
-ggplot2::theme_set(theme_light(base_size = 14))
-opts_chunk[["set"]](
-    cache = FALSE,
-    cache.lazy = FALSE,
-    dev = c("png", "pdf"),
-    error = TRUE,
-    highlight = TRUE,
-    message = FALSE,
-    prompt = FALSE,
-    tidy = FALSE,
-    warning = FALSE,
-    fig.height = 4)
+# ---- Global ggplot2 theme & colour scales ----
+ggplot2::theme_set(theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) scale_fill_cb_friendly(...)
+
+# Convenience vector for legacy code using indexed colours
+colors <- unname(cb_friendly_cols(
+  "teal", "hot_pink", "indigo", "amber", "coral",
+  "lavender", "sky", "deep_rose", "forest", "sand",
+  "light_teal", "charcoal", "steel", "blush", "deep_teal"
+))
+
+# ---- Global knitr options ----
+opts_chunk$set(
+  cache      = FALSE,
+  cache.lazy = FALSE,
+  dev        = c("png", "pdf"),
+  dpi        = 150,
+  error      = TRUE,
+  echo       = TRUE,
+  fig.align  = "center",
+  fig.height = 5,
+  fig.retina = 2,
+  fig.width  = 9.6,
+  message    = FALSE,
+  tidy       = FALSE,
+  warning    = FALSE
+)
 ```
 
 
