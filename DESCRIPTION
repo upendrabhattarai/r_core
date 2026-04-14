@@ -26,12 +26,72 @@ Imports:
     stringr,
     utils
 Suggests:
+    apeglm,
+    Banksy,
+    BiocManager,
+    caTools,
+    CellChat,
+    ChIPpeakAnno,
+    ChIPseeker,
+    clustree,
+    ComplexHeatmap,
+    cowplot,
+    data.table,
+    DEGreport,
+    DESeq2,
+    DiffBind,
+    DT,
+    EnhancedVolcano,
+    EnsDb.Hsapiens.v86,
+    fgsea,
+    future,
+    ggpubr,
+    ggrepel,
+    ggvenn,
+    glue,
+    gridExtra,
+    harmony,
+    hdf5r,
+    httr,
     hues,
+    IlluminaHumanMethylationEPICv2anno.20a1.hg38,
+    IlluminaHumanMethylationEPICv2manifest,
+    janitor,
+    kableExtra,
     knitr,
+    lme4,
+    MAST,
+    Matrix,
+    methylclock,
+    minfi,
+    msigdbr,
+    optparse,
+    patchwork,
+    pheatmap,
+    qs,
+    remotes,
     rmarkdown,
-    testthat (>= 3.0.0)
+    rtracklayer,
+    scales,
+    sccomp,
+    Seurat,
+    SeuratObject,
+    SeuratWrappers,
+    Signac,
+    SingleCellExperiment,
+    spacexr,
+    speckle,
+    SummarizedExperiment,
+    testthat (>= 3.0.0),
+    tidyverse,
+    UpSetR,
+    viridis,
+    viridisLite
+Additional_repositories:
+    https://bioconductor.org/packages/release/bioc
 VignetteBuilder: knitr
-URL: http://bcb.io/rcore/
+URL: https://github.com/upendrabhattarai/r_core
+BugReports: https://github.com/upendrabhattarai/r_core/issues
 Config/testthat/edition: 3
-Depends: 
+Depends:
     R (>= 4.2.0)

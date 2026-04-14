@@ -58,17 +58,12 @@ library(data.table)
 library(DT)
 library(patchwork)
 library(clustree)
-library(ggprism)
-library(grafify)
 library(R.utils)
 #library(future)
 
-ggplot2::theme_set(theme_prism(base_size = 12))
+ggplot2::theme_set(rcore::theme_bcbio(base_size = 13))
 # https://grafify-vignettes.netlify.app/colour_palettes.html
 # NOTE change colors here if you wish
-scale_colour_discrete <- function(...)
-  scale_colour_manual(..., values = as.vector(grafify:::graf_palettes[["kelly"]]))
-
 # Set seed for reproducibility
 set.seed(1454944673L)
 opts_chunk[["set"]](

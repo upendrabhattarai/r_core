@@ -47,20 +47,15 @@ library(qs)
 library(tidyverse)
 # Plotting
 library(patchwork)
-library(ggprism)
 
 
 import::from(magrittr,set_colnames,set_rownames,"%<>%")
 invisible(list2env(params,environment()))
 source(project_file)
 
-ggplot2::theme_set(theme_prism(base_size = 12))
+ggplot2::theme_set(rcore::theme_bcbio(base_size = 13))
 # https://grafify-vignettes.netlify.app/colour_palettes.html
 # NOTE change colors here if you wish
-scale_colour_discrete <- function(...)
-  scale_colour_manual(..., 
-                      values = as.vector(grafify:::graf_palettes[["kelly"]]))
-scale_fill_discrete <- function(...)
   scale_fill_manual(..., 
                       values = as.vector(grafify:::graf_palettes[["kelly"]]))
 
