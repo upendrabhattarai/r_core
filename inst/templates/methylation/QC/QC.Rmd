@@ -32,7 +32,7 @@ stopifnot(compareVersion(as.character(BiocManager::version()), "3.18")>=0)
 ```
 
 ```{r bcbio-css, echo=FALSE, results='asis'}
-bcbioR::bcbio_inject_css()
+rcore::bcbio_inject_css()
 ```
 
 
@@ -45,7 +45,7 @@ source(params$params_file)
 ```{r load_libraries, cache = FALSE, message = FALSE, warning=FALSE, echo=FALSE,}
 
 library(tidyverse)
-library(bcbioR)
+library(rcore)
 library(knitr)
 library(tools)
 library(qs)
@@ -73,9 +73,9 @@ options(future.globals.maxSize= 891289600)
 
 
 # ---- Global ggplot2 theme & colour scales ----
-ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
-scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
-scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
+ggplot2::theme_set(rcore::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) rcore::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) rcore::scale_fill_cb_friendly(...)
 
 # ---- Global knitr options ----
 knitr::opts_chunk$set(

@@ -38,7 +38,7 @@ stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.0.0")>=0)
 ```
 
 ```{r bcbio-css, echo=FALSE, results='asis'}
-bcbioR::bcbio_inject_css()
+rcore::bcbio_inject_css()
 ```
 
 
@@ -52,7 +52,7 @@ source(params$project_file)
 
 library(tidyverse)
 library(Seurat)
-library(bcbioR)
+library(rcore)
 library(knitr)
 library(tools)
 library(qs)
@@ -70,9 +70,9 @@ library(qs)
 
 
 # ---- Global ggplot2 theme & colour scales ----
-ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
-scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
-scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
+ggplot2::theme_set(rcore::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) rcore::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) rcore::scale_fill_cb_friendly(...)
 
 # ---- Global knitr options ----
 knitr::opts_chunk$set(

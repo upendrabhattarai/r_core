@@ -6,7 +6,7 @@ library(magrittr)
 library(Signac)
 library(EnsDb.Hsapiens.v86)
 library(qs)
-library(bcbioR)
+library(rcore)
 # Run analysis on multi-omic sc Data
 seurat <- qread("data/tea_seurat.qs")
 

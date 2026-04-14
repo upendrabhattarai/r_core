@@ -20,7 +20,7 @@ output:
 #   chunk_output_type: inline
 params:
    project_file: ../information.R
-   seurat_obj: "https://github.com/bcbio/bcbioR-test-data/raw/refs/heads/main/singlecell/tiny.rds"
+   seurat_obj: "https://github.com/bcbio/rcore-test-data/raw/refs/heads/main/singlecell/tiny.rds"
    column: "age"
    contrasts: !r list(c("age", "YOUNG", "OLD"))
    cluster_name: "2"
@@ -42,7 +42,7 @@ stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.0.0")>=0)
 
 
 ```{r bcbio-css, echo=FALSE, results='asis'}
-bcbioR::bcbio_inject_css()
+rcore::bcbio_inject_css()
 ```
 
 ```{r setup, cache=FALSE, message=FALSE, echo=FALSE, eval=T}
@@ -51,7 +51,7 @@ library(Seurat)
 library(tidyverse)
 library(data.table)
 library(knitr)
-library(bcbioR)
+library(rcore)
 library(EnhancedVolcano)
 library(pheatmap)
 library(viridisLite)
@@ -59,9 +59,9 @@ library(viridis)
 library(ggpubr)
 
 # ---- Global ggplot2 theme & colour scales ----
-ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
-scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
-scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
+ggplot2::theme_set(rcore::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) rcore::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) rcore::scale_fill_cb_friendly(...)
 
 # ---- Global knitr options ----
 knitr::opts_chunk$set(

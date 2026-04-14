@@ -12,7 +12,7 @@ library(glue)
 library(optparse)
 ##### parameter parse #####
 options(stringsAsFactors = F)
-option_list = list(make_option("--seurat_obj", default = "https://github.com/bcbio/bcbioR-test-data/raw/refs/heads/main/singlecell/tiny.rds"),
+option_list = list(make_option("--seurat_obj", default = "https://github.com/bcbio/rcore-test-data/raw/refs/heads/main/singlecell/tiny.rds"),
                    make_option("--resolution_column", default = "integrated_snn_res.0.4"),
                    make_option("--cluster_name", default = "2"),
                    make_option("--contrast", default = "age"),

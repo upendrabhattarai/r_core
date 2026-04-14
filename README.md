@@ -1,24 +1,24 @@
-# bcbioR
+# rcore
 
-[![R-CMD-check](https://github.com/bcbio/bcbioR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bcbio/bcbioR/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/bcbio/rcore/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bcbio/rcore/actions/workflows/R-CMD-check.yaml)
 
-The goal of `bcbioR` is to create guidelines for NGS data interpretation based on the experience of the Harvard Chan Bioinformatics Core and everybody who contributes to this package.
+The goal of `rcore` is to create guidelines for NGS data interpretation based on the experience of the Harvard Chan Bioinformatics Core and everybody who contributes to this package.
 
 ## Installation
 
-You can install the development version of bcbioR from [GitHub](https://github.com/) with:
+You can install the development version of rcore from [GitHub](https://github.com/) with:
 
 ```         
 # install.packages("devtools")
-devtools::install_github("bcbio/bcbioR")
-devtools::install_github("bcbio/bcbioR",ref = "devel")
+devtools::install_github("bcbio/rcore")
+devtools::install_github("bcbio/rcore",ref = "devel")
 ```
 
 ## Quick start
 
 ### Set base project
 
-use `setwd()` to set your current directory to the place where you want to work. The bcbioR functions will automatically write to whatever directory you have set.
+use `setwd()` to set your current directory to the place where you want to work. The rcore functions will automatically write to whatever directory you have set.
 
 ```         
 setwd("/path/to/analysis/folder")
@@ -69,7 +69,7 @@ bcbio_templates(type="rnaseq", outpath="/path/to/analysis/folder/reports")
 
 ### Discover more…
 
-Go to the vignette to know more `vignette("bcbioR_quick_start", package="bcbioR")`
+Go to the vignette to know more `vignette("bcbioR_quick_start", package="rcore")`
 
 ## How to Contribute
 

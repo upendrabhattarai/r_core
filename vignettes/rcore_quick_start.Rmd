@@ -1,9 +1,9 @@
 ---
-title: "bcbioR quick start"
+title: "rcore quick start"
 output: rmarkdown::html_vignette
 vignette: >
 
-  %\VignetteIndexEntry{bcbioR quick start}
+  %\VignetteIndexEntry{rcore quick start}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(bcbioR)
+library(rcore)
 library(ggplot2)
 library(ggprism)
 

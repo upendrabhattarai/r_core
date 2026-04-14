@@ -1,4 +1,4 @@
-library(bcbioR)
+library(rcore)
 
 
 test_that("rnaseq deg",{

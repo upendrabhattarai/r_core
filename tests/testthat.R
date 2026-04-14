@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(bcbioR)
+library(rcore)
 
-test_check("bcbioR")
+test_check("rcore")

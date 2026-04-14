@@ -1,4 +1,4 @@
-# bcbioR colorblind-friendly palette
+# rcore colorblind-friendly palette
 # Redesigned with teal, rose/pink, and complementary accent colours.
 # All hues are distinguishable for the most common forms of colour-blindness
 # (deuteranopia / protanopia) because the palette relies on blue-teal vs
@@ -32,7 +32,7 @@ cb_friendly_colors <- c(
   `white`        = "#FFFFFF"
 )
 
-#' List all bcbioR colorblind-friendly colours
+#' List all rcore colorblind-friendly colours
 #'
 #' Returns a named character vector of all available colours and their hex codes.
 #'
@@ -106,7 +106,7 @@ cb_friendly_pal <- function(palette = "main", reverse = FALSE, ...) {
   colorRampPalette(pal, ...)
 }
 
-#' ggplot2 colour scale using bcbioR palette
+#' ggplot2 colour scale using rcore palette
 #'
 #' @param palette See [cb_friendly_pal()].
 #' @param discrete Logical; discrete (`TRUE`, default) or continuous scale?
@@ -127,7 +127,7 @@ scale_color_cb_friendly <- function(palette = "main", discrete = TRUE,
   }
 }
 
-#' ggplot2 fill scale using bcbioR palette
+#' ggplot2 fill scale using rcore palette
 #'
 #' @param palette See [cb_friendly_pal()].
 #' @param discrete Logical; discrete (`TRUE`, default) or continuous scale?

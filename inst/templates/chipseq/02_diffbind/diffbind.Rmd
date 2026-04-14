@@ -45,7 +45,7 @@ stopifnot(compareVersion(as.character(BiocManager::version()), "3.18")>=0)
 ```
 
 ```{r bcbio-css, echo=FALSE, results='asis'}
-bcbioR::bcbio_inject_css()
+rcore::bcbio_inject_css()
 ```
 
 
@@ -98,7 +98,7 @@ library(ggrepel)
 # library(RColorBrewer)
 library(DT)
 library(pheatmap)
-library(bcbioR)
+library(rcore)
 library(janitor)
 library(ChIPpeakAnno)
 library(UpSetR)
@@ -133,9 +133,9 @@ if (params$species == 'mouse'){
 
 
 # ---- Global ggplot2 theme & colour scales ----
-ggplot2::theme_set(bcbioR::theme_bcbio(base_size = 13))
-scale_colour_discrete <- function(...) bcbioR::scale_color_cb_friendly(...)
-scale_fill_discrete   <- function(...) bcbioR::scale_fill_cb_friendly(...)
+ggplot2::theme_set(rcore::theme_bcbio(base_size = 13))
+scale_colour_discrete <- function(...) rcore::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) rcore::scale_fill_cb_friendly(...)
 
 # ---- Global knitr options ----
 knitr::opts_chunk$set(
@@ -183,7 +183,7 @@ coldata <- load_coldata(coldata_fn)
 ```{r make samplesheet, message = F, warning =F, eval = !file.exists(diffbind_samplesheet_fn)}
 # DiffBind requires a very specific samplesheet in order to create the peak counts object, see https://www.rdocumentation.org/packages/DiffBind/versions/2.0.2/topics/dba for further details
 
-# make_diffbind_samplesheet is a function provided by bcbioR to help assemble DiffBind's samplesheet 
+# make_diffbind_samplesheet is a function provided by rcore to help assemble DiffBind's samplesheet 
 # using the nf-core samplesheet and output. In the resulting DiffBind counts object, it
 # encodes your condition of interest as "Condition" and the antibody as "Factor"
 

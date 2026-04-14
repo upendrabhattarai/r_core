@@ -37,7 +37,7 @@ source(params$project_file)
 ```
 
 ```{r bcbio-css, echo=FALSE, results='asis'}
-bcbioR::bcbio_inject_css()
+rcore::bcbio_inject_css()
 ```
 
 ```{r setup, cache=FALSE, message=FALSE, warning=FALSE}
@@ -46,7 +46,7 @@ library(knitr)
 library(rmarkdown)
 library(DT)
 library(ggplot2)
-library(bcbioR)
+library(rcore)
 
 # ---- Global ggplot2 theme & colour scales ----
 theme_set(theme_bcbio(base_size = 13))

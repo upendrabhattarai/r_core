@@ -1,6 +1,6 @@
-Package: bcbioR
+Package: rcore
 Type: Package
-Title: Templates and functions to guide downstream analysis and data interpretation
+Title: r-core - Templates and functions for nf-core downstream analysis and visualization
 Version: 0.4.5
 Authors@R: person("Pantano", "Lorena", , "lorena.pantano@gmail.com",
             role = c("aut", "cre"))
@@ -31,7 +31,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-URL: http://bcb.io/bcbioR/
+URL: http://bcb.io/rcore/
 Config/testthat/edition: 3
 Depends: 
     R (>= 4.2.0)

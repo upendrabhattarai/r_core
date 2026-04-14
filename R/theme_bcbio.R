@@ -1,7 +1,7 @@
-#' bcbioR ggplot2 theme
+#' rcore ggplot2 theme
 #'
-#' A clean, modern ggplot2 theme for bcbioR HTML reports.
-#' Uses teal and rose accent colours consistent with the bcbioR colour palette.
+#' A clean, modern ggplot2 theme for rcore HTML reports.
+#' Uses teal and rose accent colours consistent with the rcore colour palette.
 #'
 #' @param base_size Base font size (default 13).
 #' @param base_family Base font family (default "sans").
@@ -84,10 +84,10 @@ theme_bcbio <- function(base_size = 13, base_family = "sans", ...) {
 }
 
 
-#' Inject bcbioR CSS styles into an HTML R Markdown document
+#' Inject rcore CSS styles into an HTML R Markdown document
 #'
 #' Call this function inside a setup chunk (with `results = 'asis'`) to embed
-#' the bcbioR visual theme into the rendered HTML report.  The function reads
+#' the rcore visual theme into the rendered HTML report.  The function reads
 #' `inst/css/bcbio_styles.css` from the installed package and writes a
 #' `<style>` block directly into the document.
 #'
@@ -99,13 +99,13 @@ theme_bcbio <- function(base_size = 13, base_family = "sans", ...) {
 #' \dontrun{
 #'   # In an R Markdown setup chunk, use:
 #'   # ```{r bcbio-css, echo=FALSE, results='asis'}
-#'   # bcbioR::bcbio_inject_css()
+#'   # rcore::bcbio_inject_css()
 #'   # ```
 #' }
 bcbio_inject_css <- function() {
-  css_path <- system.file("css", "bcbio_styles.css", package = "bcbioR")
+  css_path <- system.file("css", "bcbio_styles.css", package = "rcore")
   if (!nzchar(css_path)) {
-    warning("bcbioR: CSS file not found. Re-install the package.")
+    warning("rcore: CSS file not found. Re-install the package.")
     return(invisible(NULL))
   }
   css <- paste(readLines(css_path, warn = FALSE), collapse = "\n")

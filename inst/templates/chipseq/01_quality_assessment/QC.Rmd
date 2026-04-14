@@ -61,7 +61,7 @@ source(params$functions_file)
 
 
 ```{r bcbio-css, echo=FALSE, results='asis'}
-bcbioR::bcbio_inject_css()
+rcore::bcbio_inject_css()
 ```
 
 ```{r load_libraries, cache=FALSE, message=FALSE, warning=FALSE}
@@ -73,7 +73,7 @@ library(DEGreport)
 library(ggrepel)
 library(DT)
 library(pheatmap)
-library(bcbioR)
+library(rcore)
 library(janitor)
 library(ChIPpeakAnno)
 library(UpSetR)

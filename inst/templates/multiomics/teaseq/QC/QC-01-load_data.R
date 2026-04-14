@@ -6,7 +6,7 @@ library(magrittr)
 library(Signac)
 library(EnsDb.Hsapiens.v86)
 library(qs)
-library(bcbioR)
+library(rcore)
 # prepare seurat object with all 3 modes
 
 # read cellranger-arc outs

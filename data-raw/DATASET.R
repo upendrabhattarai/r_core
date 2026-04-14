@@ -1,9 +1,9 @@
 ## code to prepare `DATASET` dataset goes here
 library(DESeq2)
 library(tidyverse)
-coldata_fn = 'https://raw.githubusercontent.com/bcbio/bcbioR-test-data/main/rnaseq/nf-core/coldata.csv'
-counts_fn = 'https://raw.githubusercontent.com/bcbio/bcbioR-test-data/main/rnaseq/nf-core/salmon.merged.gene_counts.tsv'
-multiqc_data_dir = 'https://raw.githubusercontent.com/bcbio/bcbioR-test-data/main/rnaseq/nf-core/multiqc-report-data/'
+coldata_fn = 'https://raw.githubusercontent.com/bcbio/rcore-test-data/main/rnaseq/nf-core/coldata.csv'
+counts_fn = 'https://raw.githubusercontent.com/bcbio/rcore-test-data/main/rnaseq/nf-core/salmon.merged.gene_counts.tsv'
+multiqc_data_dir = 'https://raw.githubusercontent.com/bcbio/rcore-test-data/main/rnaseq/nf-core/multiqc-report-data/'
 se_object = NA
 column = "sample_type"
 numerator = "tumor"

@@ -10,7 +10,7 @@
 #' @param file path to CSV file for nf-core
 #' @examples
 #'
-#' bcbio_nfcore_check(system.file("extdata", "rnaseq_good.csv", package = "bcbioR") )
+#' bcbio_nfcore_check(system.file("extdata", "rnaseq_good.csv", package = "rcore") )
 #'
 #' @export
 bcbio_nfcore_check <- function(file){
@@ -55,7 +55,7 @@ bcbio_nfcore_check <- function(file){
 bcbio_templates <- function(type="rnaseq", outpath=NULL, org=NULL){
   if (type=="all"){
     usethis::ui_info("Showing analysis:")
-    msg <- basename(fs::dir_ls(fs::path_package("bcbioR", "templates")))
+    msg <- basename(fs::dir_ls(fs::path_package("rcore", "templates")))
     return(msg)
   }
   if (is.null(outpath)){
@@ -202,7 +202,7 @@ deploy_repos <- function(repo_url, path){
 
 copy_templates <- function(path, pipeline, org=NULL){
   apps=list()
-  base = c("bcbioR")
+  base = c("rcore")
   repos = c("none")
   if (pipeline=="base"){
     parts = c("templates/base")
@@ -259,9 +259,9 @@ copy_templates <- function(path, pipeline, org=NULL){
 bcbio_render <- function(path, pipeline, data){
 
   if (pipeline=="nf-core/rnaseq"){
-    # analysis_template <- fs::path_package("bcbioR", "templates", "rnaseq", "qc")
+    # analysis_template <- fs::path_package("rcore", "templates", "rnaseq", "qc")
     # fs::dir_copy(analysis_template, fs::path_join(c(path, "reports", "qc")), overwrite=TRUE)
-    # analysis_template <- fs::path_package("bcbioR", "templates", "rnaseq", "de")
+    # analysis_template <- fs::path_package("rcore", "templates", "rnaseq", "de")
     # fs::dir_copy(analysis_template, fs::path_join(c(path, "reports", "de")), overwrite=TRUE)
     render_rmd(
       fs::path_join(c(path, "reports", "qc", "QC_nf-core.Rmd")),
@@ -366,7 +366,7 @@ use_bcbio_projects <- function(path, pipeline=NULL, metadata=NULL,
     fs::dir_create(path, mode = "u=xrw,g=xwr,o=r", recurse = TRUE)
 
   ui_info("Populating base project")
-  base_template <- fs::path_package("bcbioR", "templates", "base")
+  base_template <- fs::path_package("rcore", "templates", "base")
   copy_files_in_folder(base_template, path)
 
   if (!is.null(pipeline)){
