@@ -35,8 +35,8 @@ stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.0.0")>=0)
 This code is in this ![](https://img.shields.io/badge/status-draft-grey) revision.
 
 
-```{r bcbio-css, echo=FALSE, results='asis'}
-rcore::bcbio_inject_css()
+```{r rcore-css, echo=FALSE, results='asis'}
+rcore::rcore_inject_css()
 ```
 
 ```{r setup, cache=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
@@ -57,7 +57,7 @@ library(speckle)
 library(rcore)
 
 # ---- Global ggplot2 theme & colour scales ----
-ggplot2::theme_set(rcore::theme_bcbio(base_size = 13))
+ggplot2::theme_set(rcore::theme_rcore(base_size = 13))
 scale_colour_discrete <- function(...) rcore::scale_color_cb_friendly(...)
 scale_fill_discrete   <- function(...) rcore::scale_fill_cb_friendly(...)
 

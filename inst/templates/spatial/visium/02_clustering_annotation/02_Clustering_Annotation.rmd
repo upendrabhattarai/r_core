@@ -6,11 +6,12 @@ output:
    html_document:
       code_folding: hide
       df_print: paged
-      highlights: pygments
+      highlight: pygments
       number_sections: false
       self_contained: true
-      theme: default
+      theme: cosmo
       toc: true
+      toc_depth: 3
       toc_float:
          collapsed: true
          smooth_scroll: true
@@ -33,7 +34,7 @@ stopifnot(compareVersion(as.character(packageVersion("Seurat")), "5.1")>=0)
 ```
 
 ```{r load_libraries, cache = FALSE, message = FALSE, warning=FALSE, echo=FALSE,}
-library(bcbioR)
+library(rcore)
 library(knitr)
 # analysis-specific package
 library(Seurat)
@@ -53,21 +54,30 @@ import::from(magrittr,set_colnames,set_rownames,"%<>%")
 invisible(list2env(params,environment()))
 source(project_file)
 
-ggplot2::theme_set(rcore::theme_bcbio(base_size = 13))
-# https://grafify-vignettes.netlify.app/colour_palettes.html
-# NOTE change colors here if you wish
-  scale_fill_manual(..., 
-                      values = as.vector(grafify:::graf_palettes[["kelly"]]))
+```{r rcore-css, echo=FALSE, results='asis'}
+rcore::rcore_inject_css()
+```
 
-opts_chunk[["set"]](
-    cache = F,
+```{r knitr-opts, cache=FALSE, message=FALSE, warning=FALSE}
+# ---- Global ggplot2 theme & colour scales ----
+ggplot2::theme_set(rcore::theme_rcore(base_size = 13))
+scale_colour_discrete <- function(...) rcore::scale_color_cb_friendly(...)
+scale_fill_discrete   <- function(...) rcore::scale_fill_cb_friendly(...)
+
+# ---- Global knitr options ----
+knitr::opts_chunk$set(
+    cache      = FALSE,
     cache.lazy = FALSE,
-    dev = c("png", "pdf"),
-    error = TRUE,
-    highlight = TRUE,
-    message = FALSE,
-    prompt = FALSE,
-    tidy = FALSE,
+    dev        = c("png", "pdf"),
+    dpi        = 150,
+    error      = TRUE,
+    echo       = TRUE,
+    fig.align  = "center",
+    fig.height = 5,
+    fig.retina = 2,
+    fig.width  = 9.6,
+    message    = FALSE,
+    tidy       = FALSE,
     warning = FALSE,
     echo = T, 
     fig.height = 4)

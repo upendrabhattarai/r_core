@@ -1,9 +1,9 @@
 ## code to prepare `DATASET` dataset goes here
 library(DESeq2)
 library(tidyverse)
-coldata_fn = 'https://raw.githubusercontent.com/bcbio/rcore-test-data/main/rnaseq/nf-core/coldata.csv'
-counts_fn = 'https://raw.githubusercontent.com/bcbio/rcore-test-data/main/rnaseq/nf-core/salmon.merged.gene_counts.tsv'
-multiqc_data_dir = 'https://raw.githubusercontent.com/bcbio/rcore-test-data/main/rnaseq/nf-core/multiqc-report-data/'
+coldata_fn = 'https://raw.githubusercontent.com/upendrabhattarai/rcore-test-data/main/rnaseq/nf-core/coldata.csv'
+counts_fn = 'https://raw.githubusercontent.com/upendrabhattarai/rcore-test-data/main/rnaseq/nf-core/salmon.merged.gene_counts.tsv'
+multiqc_data_dir = 'https://raw.githubusercontent.com/upendrabhattarai/rcore-test-data/main/rnaseq/nf-core/multiqc-report-data/'
 se_object = NA
 column = "sample_type"
 numerator = "tumor"
@@ -25,5 +25,5 @@ counts = counts[rownames(coldata)]
 stopifnot(all(names(counts) == rownames(coldata)))
 
 dds_to_use <- DESeqDataSetFromMatrix(counts, coldata, design = ~sample_type)
-bcbio_vsd_data <- vst(dds_to_use)
-usethis::use_data(bcbio_vsd_data, overwrite = TRUE)
+rcore_vsd_data <- vst(dds_to_use)
+usethis::use_data(rcore_vsd_data, overwrite = TRUE)

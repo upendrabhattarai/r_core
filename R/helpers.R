@@ -10,10 +10,10 @@
 #' @param file path to CSV file for nf-core
 #' @examples
 #'
-#' bcbio_nfcore_check(system.file("extdata", "rnaseq_good.csv", package = "rcore") )
+#' rcore_nfcore_check(system.file("extdata", "rnaseq_good.csv", package = "rcore") )
 #'
 #' @export
-bcbio_nfcore_check <- function(file){
+rcore_nfcore_check <- function(file){
   required=c("sample","fastq_1","fastq_2","strandedness")
   samplesheet=read_csv(file)
 
@@ -48,11 +48,11 @@ bcbio_nfcore_check <- function(file){
 #' @examples
 #'  \dontrun{
 #'   path <- withr::local_tempdir()
-#'   bcbio_templates(type="base",outpath=path)
+#'   rcore_templates(type="base",outpath=path)
 #'   fs::dir_ls(path,all=T)
 #'  }
 #' @export
-bcbio_templates <- function(type="rnaseq", outpath=NULL, org=NULL){
+rcore_templates <- function(type="rnaseq", outpath=NULL, org=NULL){
   if (type=="all"){
     usethis::ui_info("Showing analysis:")
     msg <- basename(fs::dir_ls(fs::path_package("rcore", "templates")))
@@ -125,7 +125,7 @@ render_rmd <- function(infile, outfile, ls_data){
     write_file(outfile)
 }
 
-bcbio_params <-function(nfcore_path, pipeline, metadata, copy){
+rcore_params <-function(nfcore_path, pipeline, metadata, copy){
   ui_info("Reading input files from {ui_value(nfcore_path)}")
   if (pipeline=="nf-core/rnaseq"){
     if (!copy){
@@ -177,21 +177,40 @@ copy_files_in_folder<- function(origin, remote, is_org=FALSE){
 deploy_apps <- function(apps, path){
   fs::dir_create(file.path(path, "apps"))
   sapply(names(apps), function(app){
-    dest_file=file.path(path, "apps", paste0(app, ".zip"))
-    download.file(url = apps[[app]],
-                  destfile = dest_file)
-    unzip(zipfile = dest_file, exdir = dirname(dest_file))
-    fs::file_delete(dest_file)
+    dest_file <- file.path(path, "apps", paste0(app, ".zip"))
+    status <- tryCatch(
+      download.file(url = apps[[app]], destfile = dest_file, quiet = TRUE),
+      error = function(e) {
+        ui_warn("Failed to download {ui_value(app)}: {conditionMessage(e)}")
+        return(1L)
+      }
+    )
+    if (status == 0L && fs::file_exists(dest_file)) {
+      tryCatch(
+        unzip(zipfile = dest_file, exdir = dirname(dest_file)),
+        error = function(e) ui_warn("Failed to unzip {ui_value(dest_file)}: {conditionMessage(e)}")
+      )
+      fs::file_delete(dest_file)
+    }
   })
 }
 
 deploy_repos <- function(repo_url, path){
   ui_info("Getting templates from {ui_value(repo_url)}")
 
-  dest_file=file.path(path, paste0(names(repo_url), ".zip"))
-  download.file(url = repo_url,
-                destfile = dest_file)
-  unzip(zipfile = dest_file, exdir = dirname(dest_file))
+  dest_file <- file.path(path, paste0(names(repo_url), ".zip"))
+  status <- tryCatch(
+    download.file(url = repo_url, destfile = dest_file, quiet = TRUE),
+    error = function(e) {
+      ui_stop("Failed to download repository: {conditionMessage(e)}")
+    }
+  )
+  if (status != 0L)
+    ui_stop("Download failed for {ui_value(repo_url)}")
+  tryCatch(
+    unzip(zipfile = dest_file, exdir = dirname(dest_file)),
+    error = function(e) ui_stop("Failed to unzip repository: {conditionMessage(e)}")
+  )
   fs::file_delete(dest_file)
   repo_unzip_path <- file.path(path,
                                paste0(names(repo_url), "-main"))
@@ -231,7 +250,7 @@ copy_templates <- function(path, pipeline, org=NULL){
   }
 
   #check if it is url or folder
-  if (isUrl(repos)){
+  if (grepl("^https?://", repos)){
     deploy_repos(repos, path)
   }else{
     analysis_template <- fs::path_package(base, parts)
@@ -256,7 +275,7 @@ copy_templates <- function(path, pipeline, org=NULL){
   deploy_apps(apps, path)
 }
 
-bcbio_render <- function(path, pipeline, data){
+rcore_render <- function(path, pipeline, data){
 
   if (pipeline=="nf-core/rnaseq"){
     # analysis_template <- fs::path_package("rcore", "templates", "rnaseq", "qc")
@@ -305,8 +324,8 @@ use_library <- function(custom_lib_path, project_path="."){
   source(rprofile_path)
 }
 
-# help with bcbio analysis setup
-use_bcbio_analysis <- function(path, pipeline, copy=TRUE, metadata=NULL){
+# help with rcore analysis setup
+use_rcore_analysis <- function(path, pipeline, copy=TRUE, metadata=NULL){
 
   if (copy){
     # deploy files
@@ -347,8 +366,8 @@ use_bcbio_analysis <- function(path, pipeline, copy=TRUE, metadata=NULL){
   # set all files from analysis
   copy_templates(fs::path_join(c(path, "reports")), pipeline)
   if (fs::dir_exists(pipeline)){
-    data <- bcbio_params(nfcore, pipeline, metadata)
-    bcbio_render(path, pipeline, data)
+    data <- rcore_params(pipeline, pipeline, metadata)
+    rcore_render(path, pipeline, data)
   }
 
 
@@ -356,9 +375,9 @@ use_bcbio_analysis <- function(path, pipeline, copy=TRUE, metadata=NULL){
 
 # Pilot to deploy full projects at once
 # path <- withr::local_tempdir()
-# use_bcbio_projects(path,pipeline="nf-core/rnaseq",copy=TRUE)
+# use_rcore_projects(path,pipeline="nf-core/rnaseq",copy=TRUE)
 # fs::dir_ls(path)
-use_bcbio_projects <- function(path, pipeline=NULL, metadata=NULL,
+use_rcore_projects <- function(path, pipeline=NULL, metadata=NULL,
                                git=TRUE, gh=FALSE, org=NULL, copy=TRUE) {
 
   ui_info("Creating project at {ui_value(path)}")
@@ -371,7 +390,7 @@ use_bcbio_projects <- function(path, pipeline=NULL, metadata=NULL,
 
   if (!is.null(pipeline)){
     ui_info("Using this pipeline templates {ui_value(pipeline)}")
-    use_bcbio_analysis(path, pipeline, copy = copy, metadata=metadata)
+    use_rcore_analysis(path, pipeline, copy = copy, metadata=metadata)
   }
   # is_nfcore_ready <- FALSE
   # if (is.null(pipeline) && rlang::is_interactive()){
@@ -381,17 +400,17 @@ use_bcbio_projects <- function(path, pipeline=NULL, metadata=NULL,
   #     nfcore <- readline("? Enter path to nf-core output: ")
   #   }else{
   #     ui_warn("Please, turn copy = TRUE to only deploy files or,")
-  #     ui_stop("Please use {ui_code('use_bcbio_projects')} again when you have the nf-core output.")
+  #     ui_stop("Please use {ui_code('use_rcore_projects')} again when you have the nf-core output.")
   #   }
-  #   use_bcbio_analysis(path, nfcore, copy, metadata)
+  #   use_rcore_analysis(path, nfcore, copy, metadata)
   # }else{
   #   if (fs::dir_exists(nfcore)){
   #     ui_info("Checking {ui_value(nfcore)} as nf-core output directory")
-  #     use_bcbio_analysis(path, nfcore, copy, metadata)
+  #     use_rcore_analysis(path, nfcore, copy, metadata)
   #   }else if (copy){
   #     # deploy only files
   #     ui_info("Deploying only templates without pipeline information.")
-  #     use_bcbio_analysis(path, nfcore, copy = TRUE, metadata=metadata)
+  #     use_rcore_analysis(path, nfcore, copy = TRUE, metadata=metadata)
   #   }else{
   #     ui_warn("Please, provide nfcore working directory or")
   #     ui_warn("turn copy = TRUE to only deploy files.")

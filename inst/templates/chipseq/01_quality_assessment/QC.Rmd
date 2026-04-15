@@ -60,8 +60,8 @@ source(params$functions_file)
 -   Experiment: `r experiment`
 
 
-```{r bcbio-css, echo=FALSE, results='asis'}
-rcore::bcbio_inject_css()
+```{r rcore-css, echo=FALSE, results='asis'}
+rcore::rcore_inject_css()
 ```
 
 ```{r load_libraries, cache=FALSE, message=FALSE, warning=FALSE}
@@ -81,7 +81,7 @@ library(httr)
 library(jsonlite)
 
 # ---- Global ggplot2 theme & colour scales ----
-ggplot2::theme_set(theme_bcbio(base_size = 13))
+ggplot2::theme_set(theme_rcore(base_size = 13))
 scale_colour_discrete <- function(...) scale_color_cb_friendly(...)
 scale_fill_discrete   <- function(...) scale_fill_cb_friendly(...)
 
@@ -122,11 +122,11 @@ sanitize_datatable = function(df, ...) {
 # Samples and metadata
 
 ```{r example_data, message=F, warning=F, eval = params$params_file == 'params_qc-example.R'}
-bcbio_qc_chipseq_testdata()
+rcore_qc_chipseq_testdata()
 ```
 
 ```{r load_data, message=F, warning=F}
-# This code will load from bcbio or nf-core folder
+# This code will load from nf-core folder
 coldata <- load_coldata(coldata_fn)
 coldata$sample=row.names(coldata)
 

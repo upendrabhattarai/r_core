@@ -4,7 +4,7 @@ library(rcore)
 test_that("rnaseq deg",{
   path <- withr::local_tempdir()
   print(path)
-  bcbio_templates(type="rnaseq", outpath=path)
+  rcore_templates(type="rnaseq", outpath=path)
   fs::dir_ls(path,all=T)
   rmarkdown::render(input = file.path(path,"DE/DEG.Rmd"),
                     output_dir = file.path(path,"DE"),
@@ -20,7 +20,7 @@ test_that("rnaseq deg",{
 test_that("rnaseq qc",{
   path <- withr::local_tempdir()
   print(path)
-  bcbio_templates(type="rnaseq", outpath=path)
+  rcore_templates(type="rnaseq", outpath=path)
   fs::dir_ls(path,all=T)
   rmarkdown::render(input = file.path(path,"QC/QC_nf-core.Rmd"),
                     output_dir = file.path(path,"QC"),

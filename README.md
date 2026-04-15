@@ -1,6 +1,6 @@
 # rcore
 
-[![R-CMD-check](https://github.com/bcbio/rcore/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bcbio/rcore/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/upendrabhattarai/r_core/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/upendrabhattarai/r_core/actions/workflows/R-CMD-check.yaml)
 
 The goal of `rcore` is to create guidelines for NGS data interpretation based on the experience of the Harvard Chan Bioinformatics Core and everybody who contributes to this package.
 
@@ -53,9 +53,9 @@ The following code will pop up a Rmd template will populate that folder with HCB
 
 ```         
 path="/path/to/analysis/folder"
-bcbio_templates(type="base", outpath=path)
-bcbio_templates(type="rnaseq", outpath=path)
-bcbio_templates(type="singlecell", outpath=path)
+rcore_templates(type="base", outpath=path)
+rcore_templates(type="rnaseq", outpath=path)
+rcore_templates(type="singlecell", outpath=path)
 ```
 
 ### Set RNAseq report folder
@@ -63,7 +63,7 @@ bcbio_templates(type="singlecell", outpath=path)
 This code will populate the folder with HCBC data structure guidelines and Rmd code: **You do not need to create a reports folder prior to running this code. This will create and populate the reports folder.**
 
 ```         
-bcbio_templates(type="rnaseq", outpath="/path/to/analysis/folder/reports")
+rcore_templates(type="rnaseq", outpath="/path/to/analysis/folder/reports")
 ```
 
 ## Supported analyses

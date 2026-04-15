@@ -1,35 +1,55 @@
-#' Function to help download test data for QC chipseq report
+#' Download test data for the ChIP-seq QC report
 #'
-#' It downloads files from our testdata repository: [bcbio/rcore-test-data](https://github.com/bcbio/rcore-test-data/tree/main/chipseq)
+#' Downloads narrowPeak files from the rcore test-data repository:
+#' [upendrabhattarai/rcore-test-data](https://github.com/upendrabhattarai/rcore-test-data/tree/main/chipseq)
 #'
-#' It downloads the `bowtie2/mergedLibrary/macs2/narrowPeak` output
+#' Specifically downloads the `bowtie2/mergedLibrary/macs2/narrowPeak` output
+#' into the current working directory.
 #'
+#' @return Invisibly returns the path to the downloaded files directory.
+#' @importFrom httr GET status_code content
+#' @importFrom jsonlite fromJSON
+#' @importFrom dplyr filter
 #' @export
-bcbio_qc_chipseq_testdata <- function(){
-  # if using example data to render report, download peaks from github
-  api_url <- "https://api.github.com/repos/bcbio/rcore-test-data/contents/chipseq/bowtie2/mergedLibrary/macs2/narrowPeak"
-  response <- GET(api_url)
+rcore_qc_chipseq_testdata <- function() {
+  api_url <- paste0(
+    "https://api.github.com/repos/upendrabhattarai/rcore-test-data",
+    "/contents/chipseq/bowtie2/mergedLibrary/macs2/narrowPeak"
+  )
 
-  if (status_code(response) == 200) {
-    content <- content(response, as = "text")
-    files_info <- fromJSON(content) %>% filter(name != 'consensus')
-
-    # Filter out file paths and construct raw URLs
-    file_paths <- files_info$path
-    raw_base_url <- "https://raw.githubusercontent.com/bcbio/rcore-test-data/main/"
-
-    raw_file_urls <- paste0(raw_base_url, file_paths)
-
-    # Function to download a file from a URL
-    download_file <- function(url) {
-      file_name <- basename(url)
-      download.file(url, destfile = file_name, mode = "wb")
+  response <- tryCatch(
+    httr::GET(api_url),
+    error = function(e) {
+      stop("Could not reach GitHub API: ", conditionMessage(e))
     }
+  )
 
-    # Download all files using the constructed raw URLs
-    for (url in raw_file_urls) {
-      download_file(url)
-    }
-    peaks_dir = '.'
+  if (httr::status_code(response) != 200L) {
+    stop(
+      "GitHub API returned status ", httr::status_code(response),
+      ". Check your internet connection or the repository URL."
+    )
   }
+
+  raw_text  <- httr::content(response, as = "text", encoding = "UTF-8")
+  files_info <- jsonlite::fromJSON(raw_text)
+  files_info <- dplyr::filter(files_info, name != "consensus")
+
+  raw_base <- "https://raw.githubusercontent.com/upendrabhattarai/rcore-test-data/main/"
+  raw_urls <- paste0(raw_base, files_info$path)
+
+  for (url in raw_urls) {
+    dest <- basename(url)
+    status <- tryCatch(
+      download.file(url, destfile = dest, mode = "wb", quiet = TRUE),
+      error = function(e) {
+        warning("Failed to download ", basename(url), ": ", conditionMessage(e))
+        return(1L)
+      }
+    )
+    if (status == 0L)
+      message("Downloaded: ", dest)
+  }
+
+  invisible(".")
 }

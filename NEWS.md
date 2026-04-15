@@ -1,3 +1,19 @@
+# rcore 0.5.0
+
+- Package renamed from `bcbioR` to `rcore`; all `bcbio_*` functions renamed to `rcore_*`
+- New teal/pink colorblind-friendly palette (`cb_friendly_cols`, `scale_color_cb_friendly`, `scale_fill_cb_friendly`)
+- New `theme_rcore()` ggplot2 theme with teal accents and clean facet strips
+- New `rcore_inject_css()` for injecting shared HTML report styles (`inst/css/rcore_styles.css`)
+- New `install_rcore_deps(type)` for one-call installation of all analysis dependencies
+- New `list_rcore_deps()` to inspect available dependency sets
+- All 13 Rmd report templates updated: teal cosmo theme, standardized knitr opts, CSS injection
+- Fixed `helpers.R`: undefined `nfcore` variable, replaced `isUrl()` with `grepl()`, added error handling to `deploy_apps()` and `deploy_repos()`
+- Fixed `test_data.R`: proper `@importFrom` tags; added `tryCatch` error handling
+- Updated DESCRIPTION: added httr and dplyr to Imports; added `Additional_repositories` for Bioconductor
+- Updated NAMESPACE with all new exports and importFrom declarations
+- Removed stale commented-out render code from tests
+- Fixed test data URLs to point to `upendrabhattarai/rcore-test-data`
+
 # rcore 0.4.5
 
 Migrate templates to bcbio individual repositories
@@ -35,24 +51,24 @@ More docs for clusters ids #106
 
 # rcore 0.4.1
 
-- in DEG.Rmd, write expression table only once	https://github.com/bcbio/rcore/issues/63
-- add methods to RNA QC and DE templates	https://github.com/bcbio/rcore/issues/61
+- in DEG.Rmd, write expression table only once	https://github.com/upendrabhattarai/r_core/issues/63
+- add methods to RNA QC and DE templates	https://github.com/upendrabhattarai/r_core/issues/61
 - sc DE pseudobulk
 - sc DE MAST
 - compositional analysis scRNA
 - entrezid for enrichment analysesS	v0.4.1	P1
-- subset data based on metadata file.	https://github.com/bcbio/rcore/issues/64
+- subset data based on metadata file.	https://github.com/upendrabhattarai/r_core/issues/64
 - ATACseq QC report
 - Add WGCNA analysis to RNAseq
-- bug, should be !is.na	https://github.com/bcbio/rcore/issues/73
-- line of code in volcano plot causes odd figures	https://github.com/bcbio/rcore/issues/70
-- volcano plot colors	https://github.com/bcbio/rcore/issues/74
-- remove inline option in RMD	https://github.com/bcbio/rcore/issues/78
-- change x lab to reads	https://github.com/bcbio/rcore/issues/75
+- bug, should be !is.na	https://github.com/upendrabhattarai/r_core/issues/73
+- line of code in volcano plot causes odd figures	https://github.com/upendrabhattarai/r_core/issues/70
+- volcano plot colors	https://github.com/upendrabhattarai/r_core/issues/74
+- remove inline option in RMD	https://github.com/upendrabhattarai/r_core/issues/78
+- change x lab to reads	https://github.com/upendrabhattarai/r_core/issues/75
 - Visium RMD template	
 - fix mouse genome for nfcore and templates
-- adapt to mouse and another genome in the DE RNAseq template	https://github.com/bcbio/rcore/issues/80
-- Change to Annotation Hub	https://github.com/bcbio/rcore/issues/94
+- adapt to mouse and another genome in the DE RNAseq template	https://github.com/upendrabhattarai/r_core/issues/80
+- Change to Annotation Hub	https://github.com/upendrabhattarai/r_core/issues/94
 
 # rcore 0.3.1
 

@@ -15,9 +15,9 @@
 #'   library(ggplot2)
 #'   ggplot(mtcars, aes(wt, mpg)) +
 #'     geom_point() +
-#'     theme_bcbio()
+#'     theme_rcore()
 #' }
-theme_bcbio <- function(base_size = 13, base_family = "sans", ...) {
+theme_rcore <- function(base_size = 13, base_family = "sans", ...) {
   ggplot2::theme_minimal(base_size = base_size, base_family = base_family) %+replace%
     ggplot2::theme(
       # ---- Panel ----
@@ -88,7 +88,7 @@ theme_bcbio <- function(base_size = 13, base_family = "sans", ...) {
 #'
 #' Call this function inside a setup chunk (with `results = 'asis'`) to embed
 #' the rcore visual theme into the rendered HTML report.  The function reads
-#' `inst/css/bcbio_styles.css` from the installed package and writes a
+#' `inst/css/rcore_styles.css` from the installed package and writes a
 #' `<style>` block directly into the document.
 #'
 #' @return Invisibly returns the CSS string; called for its side-effect of
@@ -98,12 +98,12 @@ theme_bcbio <- function(base_size = 13, base_family = "sans", ...) {
 #' @examples
 #' \dontrun{
 #'   # In an R Markdown setup chunk, use:
-#'   # ```{r bcbio-css, echo=FALSE, results='asis'}
-#'   # rcore::bcbio_inject_css()
+#'   # ```{r rcore-css, echo=FALSE, results='asis'}
+#'   # rcore::rcore_inject_css()
 #'   # ```
 #' }
-bcbio_inject_css <- function() {
-  css_path <- system.file("css", "bcbio_styles.css", package = "rcore")
+rcore_inject_css <- function() {
+  css_path <- system.file("css", "rcore_styles.css", package = "rcore")
   if (!nzchar(css_path)) {
     warning("rcore: CSS file not found. Re-install the package.")
     return(invisible(NULL))

@@ -15,9 +15,9 @@
 -   [ ] Replace the title in this file to match the project's title
 -   [ ] Modify `information.R` with the right text for this project, it can be used to source in other `Rmd` files. The main `Rmd` file in this directory can be used to show general information of the project if needed.
 -   [ ] If you didn't provide the pipeline when creating this project:
-        Use the function `bcbio_templates` to create templates inside `reports` for each type of analysis. For instance, for *RNAseq*:
-    -   `bcbio_templates(type="rnaseq", outpath=path)` or
-    -   `bcbio_templates(type="singlecell", outpath=path)`
+        Use the function `rcore_templates` to create templates inside `reports` for each type of analysis. For instance, for *RNAseq*:
+    -   `rcore_templates(type="rnaseq", outpath=path)` or
+    -   `rcore_templates(type="singlecell", outpath=path)`
     -   Then go to that folder and read the `README.md`
 
 ## Folders

@@ -41,7 +41,7 @@ This code is in this ![](https://img.shields.io/badge/status-alpha-yellow) revis
 ## This files needs gene_name and phase columns to work with this template
 
 cell_cycle_file="https://github.com/bcbio/resources/raw/refs/heads/main/singlecell/human_cell_cycle.csv"
-seurat_obj="https://github.com/bcbio/bcbioR-test-data/raw/refs/heads/main/singlecell/tiny.rds"
+seurat_obj="https://github.com/upendrabhattarai/rcore-test-data/raw/refs/heads/main/singlecell/tiny.rds"
 seurat_output="/tmp/seurat_clust.rds"
 
 source(params$project_file)
@@ -61,7 +61,7 @@ library(clustree)
 library(R.utils)
 #library(future)
 
-ggplot2::theme_set(rcore::theme_bcbio(base_size = 13))
+ggplot2::theme_set(rcore::theme_rcore(base_size = 13))
 # https://grafify-vignettes.netlify.app/colour_palettes.html
 # NOTE change colors here if you wish
 # Set seed for reproducibility

@@ -36,8 +36,8 @@ This code is in this ![](https://img.shields.io/badge/status-stable-green) revis
 source(params$project_file)
 ```
 
-```{r bcbio-css, echo=FALSE, results='asis'}
-rcore::bcbio_inject_css()
+```{r rcore-css, echo=FALSE, results='asis'}
+rcore::rcore_inject_css()
 ```
 
 ```{r setup, cache=FALSE, message=FALSE, warning=FALSE}
@@ -49,7 +49,7 @@ library(ggplot2)
 library(rcore)
 
 # ---- Global ggplot2 theme & colour scales ----
-theme_set(theme_bcbio(base_size = 13))
+theme_set(theme_rcore(base_size = 13))
 scale_colour_discrete <- function(...) scale_color_cb_friendly(...)
 scale_fill_discrete   <- function(...) scale_fill_cb_friendly(...)
 
