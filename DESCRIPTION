@@ -1,15 +1,29 @@
 Package: rcore
 Type: Package
-Title: r-core - Templates and functions for nf-core downstream analysis and visualization
-Version: 0.5.0
-Authors@R: person("Pantano", "Lorena", , "lorena.pantano@gmail.com",
-            role = c("aut", "cre"))
-Description: Collaborative code repository at the Harvard Chan Bioinformatics Core.
+Title: Templates and Utilities for nf-core Downstream Analysis and Visualization
+Version: 0.99.0
+Authors@R: c(
+    person("Bhattarai", "Upendra", , "upendrarajbhattarai@gmail.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "")),
+    person("Pantano", "Lorena", , "lorena.pantano@gmail.com",
+           role = "aut",
+           comment = c(ORCID = "0000-0002-3859-3249")))
+Description: Provides a collection of R Markdown report templates, ggplot2
+    themes, colorblind-friendly colour palettes, and helper functions for
+    downstream analysis of nf-core pipeline outputs.  Supported workflows
+    include RNA-seq, single-cell RNA-seq, ChIP-seq/ATAC-seq, spatial
+    transcriptomics, methylation, and multi-omics.  Templates are
+    personalised at deploy-time using a user-level configuration so that
+    any analyst or organisation can brand their own reports.  Originally
+    developed at the Harvard Chan Bioinformatics Core.
 License: MIT + file LICENSE
 LazyData: true
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
+biocViews: Software, Visualization, RNASeq, SingleCell, ChIPSeq, Spatial,
+    Methylation, Sequencing, ReportWriting, WorkflowStep
 Imports:
     magrittr,
     grDevices,
@@ -32,6 +46,7 @@ Suggests:
     apeglm,
     Banksy,
     BiocManager,
+    BiocStyle,
     caTools,
     CellChat,
     ChIPpeakAnno,
@@ -55,7 +70,6 @@ Suggests:
     gridExtra,
     harmony,
     hdf5r,
-    httr,
     hues,
     IlluminaHumanMethylationEPICv2anno.20a1.hg38,
     IlluminaHumanMethylationEPICv2manifest,
@@ -90,8 +104,6 @@ Suggests:
     UpSetR,
     viridis,
     viridisLite
-Additional_repositories:
-    https://bioconductor.org/packages/release/bioc
 VignetteBuilder: knitr
 URL: https://github.com/upendrabhattarai/r_core
 BugReports: https://github.com/upendrabhattarai/r_core/issues

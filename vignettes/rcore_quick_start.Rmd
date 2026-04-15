@@ -1,77 +1,200 @@
 ---
-title: "rcore quick start"
-output: rmarkdown::html_vignette
+title: "Getting started with rcore"
+author:
+  - name: Upendra Bhattarai
+    affiliation: Harvard Chan Bioinformatics Core
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
 vignette: >
-
-  %\VignetteIndexEntry{rcore quick start}
+  %\VignetteIndexEntry{Getting started with rcore}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+  collapse  = TRUE,
+  comment   = "#>",
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 4,
+  dpi = 100,
+  message = FALSE,
+  warning = FALSE
 )
 ```
 
-```{r setup}
+# Introduction
+
+`rcore` provides a toolkit for analysts doing downstream analysis of
+[nf-core](https://nf-co.re/) pipeline outputs.  It bundles:
+
+- **R Markdown templates** for RNA-seq, single-cell, ChIP-seq, spatial
+  transcriptomics, methylation, and multi-omics reporting.
+- A **colorblind-friendly colour palette** based on teal and rose.
+- A **ggplot2 theme** (`theme_rcore`) consistent with the report CSS.
+- **Helper functions** for deploying templates, installing dependencies, and
+  personalising reports with your own author name and contact details.
+
+`rcore` was originally developed at the Harvard Chan Bioinformatics Core
+and is now maintained as an open community package.
+
+# Installation
+
+```{r install, eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("rcore")
+```
+
+After installing, load the package:
+
+```{r load}
 library(rcore)
 library(ggplot2)
+```
 
-ggplot2::theme_set(theme_rcore(base_size = 14))
+# Personalising your reports
+
+Run `rcore_setup()` once after installing the package.  Your name and
+e-mail are stored in a user-level config file and will appear in every
+report you deploy from that point on.
+
+```{r setup-config, eval=FALSE}
+rcore_setup(
+  author   = "Your Name",
+  email    = "you@example.com",
+  org_abbr = "mylab"
+)
+```
+
+Check the stored settings at any time:
+
+```{r get-config, eval=FALSE}
+rcore_get_config()
+```
+
+# Colorblind-friendly palette
+
+`rcore` ships a 16-colour palette built around teal and rose — designed
+to be distinguishable for the most common forms of colour-blindness
+(deuteranopia/protanopia) while remaining visually appealing.
+
+## Viewing the colours
+
+```{r palette-names}
+list_cb_friendly_cols()
+```
+
+## Using with ggplot2
+
+The palette integrates directly with ggplot2 via
+`scale_color_cb_friendly()` and `scale_fill_cb_friendly()`:
+
+```{r palette-scatter, fig.cap="Diamond price vs. carat coloured by clarity using the rcore palette."}
+set.seed(42)
+dsamp <- diamonds[sample(nrow(diamonds), 800L), ]
+
+ggplot(dsamp, aes(carat, price, colour = cut)) +
+  geom_point(alpha = 0.7, size = 1.8) +
+  scale_color_cb_friendly() +
+  theme_rcore() +
+  labs(title = "Diamond price vs. carat",
+       subtitle = "Coloured by cut — rcore palette",
+       x = "Carat", y = "Price (USD)")
+```
+
+You can also set the palette globally for the whole R session:
+
+```{r global-scale, eval=FALSE}
+theme_set(theme_rcore(base_size = 13))
 scale_colour_discrete <- function(...) scale_color_cb_friendly(...)
 scale_fill_discrete   <- function(...) scale_fill_cb_friendly(...)
 ```
 
-# Color blind friendly palette
+## Available palette variants
 
-Compatible with `ggplot`.
-
-```{r, fig.width=7}
-set.seed(596)
-dsamp <- diamonds[sample(nrow(diamonds), 1000), ]
-ggplot(dsamp, aes(carat, price)) +
-  geom_point(aes(colour = clarity)) +
-  scale_color_cb_friendly()
+```{r palette-variants, fig.cap="Heatmap showing the teal\u2013white\u2013rose diverging palette."}
+pal_fn <- cb_friendly_pal("heatmap")
+image(matrix(seq_len(20L)), col = pal_fn(20L), axes = FALSE,
+      main = "heatmap palette (rose \u2013 white \u2013 teal)")
 ```
 
+# ggplot2 theme
 
-And get the colors directly:
+`theme_rcore()` is a clean, minimal theme with teal accent colours.
+It can be used standalone or combined with any `scale_*` function.
 
-```{r}
-cb_friendly_cols(1:16)
-```
-This is the full palette:
-
-```{r fig.width=9, fig.height=6}
-library(hues)
-swatch(cb_friendly_cols(1:16))
-```
-
-# Set projects
-
-HCBC uses a structured based directory to organize projects. You can set up this by using:
-
-```{r}
-tmp_dir=withr::local_tempdir()
-rcore_templates(type="base", outpath=tmp_dir)
-fs::dir_ls(tmp_dir, recurse=TRUE)
+```{r theme-demo, fig.cap="Bar chart using theme_rcore with the built-in teal palette."}
+ggplot(mpg, aes(class, fill = drv)) +
+  geom_bar(position = "dodge") +
+  scale_fill_cb_friendly(palette = "cool") +
+  theme_rcore() +
+  labs(title = "Vehicle class by drive type",
+       x = "Vehicle class", y = "Count", fill = "Drive")
 ```
 
+# Deploying report templates
 
-We support multiple analyses type:
+## Set up a new project
 
-- RNAseq
-- scRNAseq
-- ChipPseq
+`rcore_templates()` copies Rmd reports and supporting files into a folder
+of your choice.  The `author:` field in every deployed Rmd is
+automatically updated to the name you stored with `rcore_setup()`.
 
-To get the example code for any of them you can use a similar command:
-
-```{r}
-analysis_tmp=fs::path_join(c(tmp_dir, "reports"))
-rcore_templates(type="rnaseq", outpath=analysis_tmp)
-fs::dir_ls(analysis_tmp, recurse=TRUE)
+```{r templates-base}
+tmp_dir <- withr::local_tempdir()
+rcore_templates(type = "base", outpath = tmp_dir)
+fs::dir_ls(tmp_dir, recurse = TRUE, all = TRUE)
 ```
 
-Use `scrnaseq`, `teaseq` or `cosmx` to get those other templates.
+## Deploy analysis templates
+
+Supported types are `"rnaseq"`, `"singlecell"`, `"singlecell_delux"`,
+`"spatial"`, `"peakseq"`, and `"multiomics"`.
+
+```{r templates-rnaseq}
+reports_dir <- fs::path_join(c(tmp_dir, "reports"))
+rcore_templates(type = "rnaseq", outpath = reports_dir)
+fs::dir_ls(reports_dir, all = TRUE)
+```
+
+# Installing analysis dependencies
+
+Use `install_rcore_deps()` to install all packages needed for a specific
+workflow.  The function handles CRAN, Bioconductor, and GitHub-only
+packages automatically.
+
+```{r install-deps, eval=FALSE}
+# Install only what RNA-seq templates need
+install_rcore_deps("rnaseq")
+
+# Install everything (takes a while)
+install_rcore_deps("all")
+```
+
+See what each workflow needs before installing:
+
+```{r list-deps}
+list_rcore_deps()
+```
+
+# Injecting the CSS theme into a report
+
+Add this chunk near the top of any `.Rmd` file to activate the rcore
+HTML styling (dot-grid background, section cards, professional footer):
+
+````
+```{r rcore-css, echo=FALSE, results='asis'}
+rcore::rcore_inject_css()
+```
+````
+
+# Session information
+
+```{r sessioninfo}
+sessionInfo()
+```

@@ -5,12 +5,21 @@
 }
 
 
-#' Function to check samplesheet for nf-core
+#' Validate an nf-core samplesheet CSV
 #'
-#' @param file path to CSV file for nf-core
+#' Checks that a CSV samplesheet intended for use with nf-core pipelines
+#' contains all required columns, that sample names do not start with a digit,
+#' and that no required fields contain \code{NA} values.
+#'
+#' @param file Character scalar; path to the CSV samplesheet.
+#'
+#' @return Called for its side-effect.  Prints a message describing the
+#'   validation outcome.  Throws an error if required columns are missing or
+#'   sample names are invalid.
+#'
 #' @examples
-#'
-#' rcore_nfcore_check(system.file("extdata", "rnaseq_good.csv", package = "rcore") )
+#' good <- system.file("extdata", "rnaseq_good.csv", package = "rcore")
+#' rcore_nfcore_check(good)
 #'
 #' @export
 rcore_nfcore_check <- function(file){
@@ -79,31 +88,31 @@ rcore_templates <- function(type="rnaseq", outpath=NULL, org=.rcore_org()){
   fs::dir_create(outpath)
   switch(type,
          base={
-           #file.copy(fpath, outpath, recursive = T)
+           #file.copy(fpath, outpath, recursive = TRUE)
            copy_templates(outpath, "base", org)
          },
          rnaseq={
-           #file.copy(fpath, outpath, recursive = T)
+           #file.copy(fpath, outpath, recursive = TRUE)
            copy_templates(outpath, "nf-core/rnaseq", org)
          },
          singlecell={
-           #file.copy(fpath, outpath, recursive = T)
+           #file.copy(fpath, outpath, recursive = TRUE)
            copy_templates(outpath, "singlecell", org)
          },
          singlecell_delux={
-           #file.copy(fpath, outpath, recursive = T)
+           #file.copy(fpath, outpath, recursive = TRUE)
            copy_templates(outpath, "singlecell_delux", org)
          },
          spatial={
-           #file.copy(fpath, outpath, recursive = T)
+           #file.copy(fpath, outpath, recursive = TRUE)
            copy_templates(outpath, "spatial", org)
          },
          peakseq={
-           #file.copy(fpath, outpath, recursive = T)
+           #file.copy(fpath, outpath, recursive = TRUE)
            copy_templates(outpath, "peakseq", org)
          },
          multiomics={
-           #file.copy(fpath, outpath, recursive = T)
+           #file.copy(fpath, outpath, recursive = TRUE)
            copy_templates(outpath, "multiomics", org)
          },
          {

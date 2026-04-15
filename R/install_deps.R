@@ -222,19 +222,18 @@ install_rcore_deps <- function(type = "core",
 #' @examples
 #' list_rcore_deps()
 list_rcore_deps <- function() {
-  cat("rcore package dependencies by analysis type\n")
-  cat(strrep("=", 50), "\n\n")
+  message("rcore package dependencies by analysis type")
+  message(strrep("=", 50))
 
   for (nm in names(.rcore_analysis_deps)) {
     pkgs <- .rcore_analysis_deps[[nm]]
-    if (length(pkgs) == 0) pkgs <- "(none beyond core)"
-    cat(sprintf("%-14s %s\n", paste0(nm, ":"),
-                paste(pkgs, collapse = ", ")))
-    cat("\n")
+    if (length(pkgs) == 0L) pkgs <- "(none beyond core)"
+    message(sprintf("%-14s %s", paste0(nm, ":"),
+                    paste(pkgs, collapse = ", ")))
   }
 
-  cat("GitHub-only packages (any workflow that needs them):\n")
-  cat(" ", paste(.rcore_deps$github, collapse = "\n  "), "\n")
+  message("\nGitHub-only packages (any workflow that needs them):")
+  message(paste(" ", .rcore_deps$github, collapse = "\n"))
 
   invisible(.rcore_analysis_deps)
 }
