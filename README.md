@@ -2,6 +2,9 @@
 
 [![R-CMD-check](https://github.com/upendrabhattarai/r_core/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/upendrabhattarai/r_core/actions/workflows/R-CMD-check.yaml)
 
+> **Built on the shoulders of giants.**
+> `rcore` is a personal extension of the excellent [`bcbioR`](https://github.com/bcbio/bcbioR) package developed by the [Harvard Chan Bioinformatics Core (HBC)](https://bioinformatics.sph.harvard.edu/). The original design, template structure, and core workflows are the work of the HBC team — this package adds a refreshed visual theme, colorblind-friendly palettes, streamlined dependency management, and a few extra flavors on top of that foundation. All credit for the underlying framework goes to the talented folks at HBC. 🙏
+
 The goal of `rcore` is to create guidelines for NGS data interpretation based on the experience of the Harvard Chan Bioinformatics Core and everybody who contributes to this package.
 
 ## Installation
