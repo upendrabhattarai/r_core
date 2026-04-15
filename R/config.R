@@ -47,10 +47,10 @@ rcore_setup <- function(author = NULL, email = NULL, org_abbr = NULL) {
     author <- readline(
       "Author / organization name (shown in report headers): "
     )
-    author <- trimws(author)
-    if (nchar(author) == 0L)
-      stop("Author name cannot be empty.")
   }
+  author <- trimws(author)
+  if (nchar(author) == 0L)
+    stop("Author name cannot be empty.")
 
   # ---- email ----------------------------------------------------------------
   if (is.null(email)) {

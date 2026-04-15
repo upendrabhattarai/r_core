@@ -52,6 +52,10 @@ cb_friendly_cols <- function(...) {
   cols <- c(...)
   if (is.null(cols))
     return(cb_friendly_colors)
+  unknown <- cols[!cols %in% names(cb_friendly_colors)]
+  if (length(unknown) > 0L)
+    stop("Unknown colour name(s): ", paste(unknown, collapse = ", "),
+         ". Use list_cb_friendly_cols() to see all available names.")
   cb_friendly_colors[cols]
 }
 
@@ -119,9 +123,7 @@ scale_color_cb_friendly <- function(palette = "main", discrete = TRUE,
                                     reverse = FALSE, ...) {
   pal <- cb_friendly_pal(palette = palette, reverse = reverse)
   if (discrete) {
-    ggplot2::discrete_scale("colour",
-                            paste0("cb_friendly_", palette),
-                            palette = pal, ...)
+    ggplot2::discrete_scale("colour", palette = pal, ...)
   } else {
     ggplot2::scale_color_gradientn(colours = pal(256), ...)
   }
@@ -140,9 +142,7 @@ scale_fill_cb_friendly <- function(palette = "main", discrete = TRUE,
                                    reverse = FALSE, ...) {
   pal <- cb_friendly_pal(palette = palette, reverse = reverse)
   if (discrete) {
-    ggplot2::discrete_scale("fill",
-                            paste0("cb_friendly_", palette),
-                            palette = pal, ...)
+    ggplot2::discrete_scale("fill", palette = pal, ...)
   } else {
     ggplot2::scale_fill_gradientn(colours = pal(256), ...)
   }

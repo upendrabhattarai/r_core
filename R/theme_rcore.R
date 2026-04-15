@@ -8,6 +8,7 @@
 #' @param ... Additional arguments passed to [ggplot2::theme()].
 #'
 #' @return A ggplot2 theme object.
+#' @importFrom ggplot2 %+replace%
 #' @export
 #'
 #' @examples
