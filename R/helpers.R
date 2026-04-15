@@ -31,28 +31,36 @@ rcore_nfcore_check <- function(file){
   }
 }
 
-#' Function to help deploy analysis folder inside a project folder
+#' Deploy analysis templates into a project folder
 #'
-#' This function contains Rmd, R, md, files that help to structure
-#' an analysis following HCBC best-practices.
-#' For rnaseq, it will deploy: QC and DE Rmd with additional files to help
-#'   to facilitate the analysis as needed.
+#' Copies Rmd reports, R scripts, and supporting files for a given analysis
+#' type into \code{outpath}.  The \code{author} field in every deployed Rmd is
+#' automatically set to the name stored by \code{\link{rcore_setup}}.  If you
+#' have not run \code{rcore_setup()} yet, templates are deployed with the
+#' original "Harvard Chan Bioinformatics Core" author string.
 #'
-#' Normally these helper files are inside a report folder inside a
-#' project folder.
+#' Org-specific files (e.g. custom README or checklist) are looked up in an
+#' \code{org/<abbr>/} sub-folder of the template directory.  The abbreviation
+#' defaults to the one stored by \code{\link{rcore_setup}}; supply \code{org}
+#' explicitly only when you want to override it for a single call.
 #'
-#' @param type string indicating the type of analysis, supported: rnaseq.
+#' @param type string indicating the type of analysis. Supported values:
+#'   \code{"base"}, \code{"rnaseq"}, \code{"singlecell"},
+#'   \code{"singlecell_delux"}, \code{"spatial"}, \code{"peakseq"},
+#'   \code{"multiomics"}.  Use \code{"all"} to list available types.
+#' @param outpath string path indicating where to copy the files.
+#' @param org optional override for the org abbreviation used to look up
+#'   org-specific template files.  Defaults to the abbreviation stored by
+#'   \code{\link{rcore_setup}}.
 #'
-#' @param outpath string path indicating where to copy all the files to
-#' @param org string with the organization name. To deploy specific files.
 #' @examples
 #'  \dontrun{
 #'   path <- withr::local_tempdir()
-#'   rcore_templates(type="base",outpath=path)
-#'   fs::dir_ls(path,all=T)
+#'   rcore_templates(type="base", outpath=path)
+#'   fs::dir_ls(path, all=TRUE)
 #'  }
 #' @export
-rcore_templates <- function(type="rnaseq", outpath=NULL, org=NULL){
+rcore_templates <- function(type="rnaseq", outpath=NULL, org=.rcore_org()){
   if (type=="all"){
     usethis::ui_info("Showing analysis:")
     msg <- basename(fs::dir_ls(fs::path_package("rcore", "templates")))
@@ -60,6 +68,13 @@ rcore_templates <- function(type="rnaseq", outpath=NULL, org=NULL){
   }
   if (is.null(outpath)){
     usethis::ui_stop("outpath needs to be defined.")
+  }
+  # Nudge new users to personalise their install
+  if (is.null(rcore_get_config())) {
+    usethis::ui_info(paste0(
+      "Tip: run {usethis::ui_code('rcore_setup()')} once to set your author ",
+      "name and org — templates will then be personalised automatically."
+    ))
   }
   fs::dir_create(outpath)
   switch(type,
@@ -266,12 +281,22 @@ copy_templates <- function(path, pipeline, org=NULL){
     if (fs::dir_exists(org_template)){
       ui_info("Getting templates from {ui_value(org_template)}")
       copy_files_in_folder(org_template, path, is_org=TRUE)
+    } else {
+      # Create an empty org folder named after the user's org so they have
+      # a place to drop their own org-specific files in the future
+      org_out <- fs::path_join(c(path, "org", org))
+      fs::dir_create(org_out)
+      ui_info(paste0(
+        "No org-specific templates found for {ui_value(org)}. ",
+        "An empty folder has been created at {ui_value(org_out)} — ",
+        "add your own org files there."
+      ))
     }
   }
 
-  # check org folder is in there
-  # search for param + _README.md
-  # concat file to README.md
+  # Personalise the author field in all deployed Rmd files
+  .replace_author_in_templates(path, .rcore_author())
+
   deploy_apps(apps, path)
 }
 

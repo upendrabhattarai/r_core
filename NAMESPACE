@@ -2,6 +2,8 @@
 
 export(rcore_inject_css)
 export(rcore_nfcore_check)
+export(rcore_setup)
+export(rcore_get_config)
 export(install_rcore_deps)
 export(list_rcore_deps)
 export(rcore_templates)

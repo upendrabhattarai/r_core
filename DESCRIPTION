@@ -1,7 +1,7 @@
 Package: rcore
 Type: Package
 Title: r-core - Templates and functions for nf-core downstream analysis and visualization
-Version: 0.4.5
+Version: 0.5.0
 Authors@R: person("Pantano", "Lorena", , "lorena.pantano@gmail.com",
             role = c("aut", "cre"))
 Description: Collaborative code repository at the Harvard Chan Bioinformatics Core.
@@ -26,6 +26,7 @@ Imports:
     whisker,
     rlang,
     stringr,
+    tools,
     utils
 Suggests:
     apeglm,
