@@ -6,34 +6,41 @@
 
 #' Set up rcore with your author and organization details
 #'
-#' Run this once after installing rcore.  The name and abbreviation you provide
-#' are stored in a user-level config file and used automatically in:
+#' Run this once after installing rcore.  The name, email, and abbreviation you
+#' provide are stored in a user-level config file and used automatically in:
 #' \itemize{
 #'   \item The \code{author:} field of every Rmd template deployed by
 #'         \code{\link{rcore_templates}}.
+#'   \item The footer of every rendered HTML report (author name + contact
+#'         email injected by \code{\link{rcore_inject_css}}).
 #'   \item The default \code{org} folder lookup inside template directories
 #'         (replaces the hard-coded \code{"hcbc"} default).
 #' }
 #'
 #' @param author Full author or organization name that will appear in report
-#'   YAML headers (e.g. \code{"Jane Smith"} or
+#'   YAML headers and the report footer (e.g. \code{"Jane Smith"} or
 #'   \code{"Awesome Bioinformatics Lab"}).
+#' @param email Contact email address shown in the report footer.  Leave
+#'   \code{NULL} to be prompted interactively, or supply \code{""} to omit the
+#'   email from footers.
 #' @param org_abbr Short lower-case abbreviation used to match org-specific
 #'   template sub-folders (e.g. \code{"mylab"}).  Defaults to the first 8
 #'   alphanumeric characters of \code{author} if left \code{NULL}.
 #'
-#' @return Invisibly returns a named list with \code{author} and
-#'   \code{org_abbr}.
+#' @return Invisibly returns a named list with \code{author}, \code{email},
+#'   and \code{org_abbr}.
 #'
 #' @examples
 #' \dontrun{
-#'   rcore_setup(author = "Jane Smith", org_abbr = "mylab")
+#'   rcore_setup(author = "Jane Smith",
+#'               email  = "jane@example.com",
+#'               org_abbr = "mylab")
 #'
 #'   # Interactive — prompts when called with no arguments
 #'   rcore_setup()
 #' }
 #' @export
-rcore_setup <- function(author = NULL, org_abbr = NULL) {
+rcore_setup <- function(author = NULL, email = NULL, org_abbr = NULL) {
 
   # ---- author ---------------------------------------------------------------
   if (is.null(author)) {
@@ -43,6 +50,12 @@ rcore_setup <- function(author = NULL, org_abbr = NULL) {
     author <- trimws(author)
     if (nchar(author) == 0L)
       stop("Author name cannot be empty.")
+  }
+
+  # ---- email ----------------------------------------------------------------
+  if (is.null(email)) {
+    entered_email <- trimws(readline("Contact email (shown in report footer, leave blank to skip): "))
+    email <- entered_email
   }
 
   # ---- org abbreviation -----------------------------------------------------
@@ -62,12 +75,17 @@ rcore_setup <- function(author = NULL, org_abbr = NULL) {
   config_path <- file.path(config_dir, "config.dcf")
 
   write.dcf(
-    data.frame(Author = author, OrgAbbr = org_abbr, stringsAsFactors = FALSE),
+    data.frame(Author  = author,
+               Email   = email,
+               OrgAbbr = org_abbr,
+               stringsAsFactors = FALSE),
     file = config_path
   )
 
   usethis::ui_done("rcore configured")
   usethis::ui_info("  Author : {usethis::ui_value(author)}")
+  if (nchar(email) > 0L)
+    usethis::ui_info("  Email  : {usethis::ui_value(email)}")
   usethis::ui_info("  Org    : {usethis::ui_value(org_abbr)}")
   usethis::ui_info("  Saved  : {usethis::ui_value(config_path)}")
   usethis::ui_info(paste0(
@@ -75,7 +93,7 @@ rcore_setup <- function(author = NULL, org_abbr = NULL) {
     "{usethis::ui_value(author)} as the report author."
   ))
 
-  invisible(list(author = author, org_abbr = org_abbr))
+  invisible(list(author = author, email = email, org_abbr = org_abbr))
 }
 
 #' View the current rcore configuration

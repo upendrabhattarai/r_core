@@ -1,5 +1,5 @@
 /* ==========================================================================
-   rcore_styles.css  –  Harvard Chan Bioinformatics Core
+   rcore_styles.css  –  rcore HTML Report Theme
    Colour palette: teal (#006B6B / #0D9488 / #5EEAD4) +
                    pink/rose (#EC4899 / #BE185D) + supporting accents
    ========================================================================== */
@@ -32,24 +32,49 @@
 
   --border:       #E2E8F0;
   --border-mid:   #CBD5E1;
-  --bg-card:      #FAFAFA;
+  --bg-card:      #FFFFFF;
+  --bg-page:      #f1f5f9;
 
   --font-body:    'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --font-mono:    'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-  --radius:       8px;
+  --radius:       10px;
+  --radius-lg:    14px;
+  --shadow-sm:    0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:    0 4px 12px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.05);
 }
 
 /* --------------------------------------------------------------------------
-   2. Base / Typography
+   2. Page background — soft dot-grid  (like Claude app)
    -------------------------------------------------------------------------- */
 body {
-  font-family: var(--font-body);
-  font-size:   15px;
-  line-height: 1.75;
-  color:       var(--text-primary);
-  background:  #ffffff;
+  font-family:      var(--font-body);
+  font-size:        15px;
+  line-height:      1.75;
+  color:            var(--text-primary);
+  background-color: var(--bg-page);
+  background-image: radial-gradient(circle, rgba(148,163,184,.55) 1px, transparent 1px);
+  background-size:  28px 28px;
+  margin:           0;
+  padding:          0;
 }
 
+/* --------------------------------------------------------------------------
+   3. Main content card — white surface floating above checker background
+   -------------------------------------------------------------------------- */
+.main-container,
+div.main-container {
+  background:    var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow:    var(--shadow-md);
+  padding:       2rem 2.5rem 3rem;
+  margin:        2rem auto;
+  max-width:     1080px;
+  border:        1px solid var(--border);
+}
+
+/* --------------------------------------------------------------------------
+   4. Base typography
+   -------------------------------------------------------------------------- */
 p {
   margin: 0 0 1em;
 }
@@ -62,7 +87,7 @@ a {
 a:hover { color: var(--rose-mid); }
 
 /* --------------------------------------------------------------------------
-   3. Headings
+   5. Headings
    -------------------------------------------------------------------------- */
 h1, h2, h3, h4, h5, h6 {
   font-weight:   700;
@@ -72,9 +97,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size:     1.85em;
-  color:         var(--teal-dark);
-  border-bottom: 3px solid var(--teal-light);
+  font-size:      1.85em;
+  color:          var(--teal-dark);
+  border-bottom:  3px solid var(--teal-light);
   padding-bottom: .3em;
 }
 h2 {
@@ -90,22 +115,51 @@ h4, h5, h6 {
   color:     var(--text-muted);
 }
 
-/* Section numbers */
 .header-section-number {
   color:        var(--teal-mid);
   margin-right: .45em;
 }
 
 /* --------------------------------------------------------------------------
-   4. Table of Contents
+   6. Section cards — each h2-level section gets a card outline
+   -------------------------------------------------------------------------- */
+.section.level2 {
+  background:    #ffffff;
+  border:        1px solid var(--border);
+  border-top:    3px solid var(--teal-mid);
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding:       1.4rem 1.8rem 1.2rem;
+  margin:        1.8rem 0;
+  box-shadow:    var(--shadow-sm);
+}
+
+.section.level2 > h2:first-child {
+  margin-top: 0;
+}
+
+.section.level3 {
+  background:    var(--teal-bg);
+  border-left:   3px solid var(--teal-light);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding:       .9rem 1.2rem;
+  margin:        1.2rem 0;
+}
+
+.section.level3 > h3:first-child {
+  margin-top: 0;
+}
+
+/* --------------------------------------------------------------------------
+   7. Table of Contents
    -------------------------------------------------------------------------- */
 #TOC {
-  background:   var(--teal-bg);
-  border-left:  4px solid var(--teal-mid);
-  padding:      1rem 1.4rem;
+  background:    var(--teal-bg);
+  border-left:   4px solid var(--teal-mid);
+  padding:       1rem 1.4rem;
   border-radius: 0 var(--radius) var(--radius) 0;
-  font-size:    .87em;
-  line-height:  1.6;
+  font-size:     .87em;
+  line-height:   1.6;
+  box-shadow:    var(--shadow-sm);
 }
 #TOC ul  { margin: 0; padding-left: 1.1em; }
 #TOC li  { margin: .15em 0; }
@@ -113,18 +167,19 @@ h4, h5, h6 {
 #TOC a:hover { color: var(--rose-mid); }
 
 /* --------------------------------------------------------------------------
-   5. Code blocks
+   8. Code blocks
    -------------------------------------------------------------------------- */
 pre {
-  background:   #f8fafc;
-  border:       1px solid var(--border);
-  border-left:  4px solid var(--teal-light);
+  background:    #f8fafc;
+  border:        1px solid var(--border);
+  border-left:   4px solid var(--teal-light);
   border-radius: 0 var(--radius) var(--radius) 0;
-  padding:      .9em 1.2em;
-  font-family:  var(--font-mono);
-  font-size:    .84em;
-  overflow-x:   auto;
-  line-height:  1.6;
+  padding:       .9em 1.2em;
+  font-family:   var(--font-mono);
+  font-size:     .84em;
+  overflow-x:    auto;
+  line-height:   1.6;
+  box-shadow:    var(--shadow-sm);
 }
 
 code {
@@ -143,7 +198,7 @@ pre code {
 }
 
 /* --------------------------------------------------------------------------
-   6. Tables (kable / knitr)
+   9. Tables (kable / knitr)
    -------------------------------------------------------------------------- */
 table {
   border-collapse: collapse;
@@ -167,31 +222,32 @@ th {
   white-space:    nowrap;
 }
 td {
-  padding:       .58em 1em;
-  border-bottom: 1px solid var(--border);
+  padding:        .58em 1em;
+  border-bottom:  1px solid var(--border);
   vertical-align: top;
 }
 tbody tr:nth-child(even) { background: var(--teal-bg); }
 tbody tr:hover           { background: var(--teal-bg2); transition: background .12s; }
 
 /* --------------------------------------------------------------------------
-   7. Figures & captions
+   10. Figures & captions
    -------------------------------------------------------------------------- */
 img {
   max-width:  100%;
   height:     auto;
   display:    block;
   margin:     .4em auto;
+  border-radius: 4px;
 }
 
 .figure {
   text-align:    center;
   margin:        1.6em auto;
-  padding:       .85em .85em .6em;
-  background:    var(--bg-card);
+  padding:       1rem 1rem .75rem;
+  background:    #fafafa;
   border:        1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow:    0 2px 6px rgba(0,0,0,.05);
+  box-shadow:    var(--shadow-sm);
 }
 
 p.caption, .caption {
@@ -203,7 +259,7 @@ p.caption, .caption {
 }
 
 /* --------------------------------------------------------------------------
-   8. Blockquote / callout
+   11. Blockquote / callout
    -------------------------------------------------------------------------- */
 blockquote {
   border-left:   4px solid var(--teal-mid);
@@ -216,7 +272,7 @@ blockquote {
 }
 
 /* --------------------------------------------------------------------------
-   9. Tabset panels  (.tabset in rmarkdown)
+   12. Tabset panels  (.tabset in rmarkdown)
    -------------------------------------------------------------------------- */
 .nav-tabs {
   border-bottom: 2px solid var(--teal-mid);
@@ -244,7 +300,7 @@ blockquote {
 }
 
 /* --------------------------------------------------------------------------
-   10. Code-folding button
+   13. Code-folding button
    -------------------------------------------------------------------------- */
 .btn-default,
 button.btn.btn-default {
@@ -265,7 +321,7 @@ button.btn.btn-default:hover {
 }
 
 /* --------------------------------------------------------------------------
-   11. Document header (title / author / date)
+   14. Document header (title / author / date)
    -------------------------------------------------------------------------- */
 .title {
   color:          var(--teal-dark);
@@ -279,7 +335,7 @@ button.btn.btn-default:hover {
 .date     { color: var(--text-subtle); font-size: .90em; }
 
 /* --------------------------------------------------------------------------
-   12. DataTables (DT package)
+   15. DataTables (DT package)
    -------------------------------------------------------------------------- */
 .dataTables_wrapper .dataTables_filter input {
   border:        1px solid var(--border-mid);
@@ -292,23 +348,22 @@ button.btn.btn-default:hover {
   border-color: var(--teal-mid);
   box-shadow:   0 0 0 3px rgba(13,148,136,.15);
 }
-
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-  background:   var(--teal-mid) !important;
-  border-color: var(--teal-mid) !important;
-  color:        white !important;
+  background:    var(--teal-mid) !important;
+  border-color:  var(--teal-mid) !important;
+  color:         white !important;
   border-radius: 4px;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-  background:   var(--teal-bg) !important;
-  border-color: var(--teal-light) !important;
-  color:        var(--teal-dark) !important;
+  background:    var(--teal-bg) !important;
+  border-color:  var(--teal-light) !important;
+  color:         var(--teal-dark) !important;
   border-radius: 4px;
 }
 
 /* --------------------------------------------------------------------------
-   13. Alert / badge badges (status badges in Rmds)
+   16. Alert badges
    -------------------------------------------------------------------------- */
 .badge, .label {
   border-radius: 4px;
@@ -317,7 +372,7 @@ button.btn.btn-default:hover {
 }
 
 /* --------------------------------------------------------------------------
-   14. Scrollbar styling (WebKit)
+   17. Scrollbar styling (WebKit)
    -------------------------------------------------------------------------- */
 ::-webkit-scrollbar             { width: 7px; height: 7px; }
 ::-webkit-scrollbar-track       { background: #f1f5f9; }
@@ -325,10 +380,79 @@ button.btn.btn-default:hover {
 ::-webkit-scrollbar-thumb:hover { background: var(--teal-mid); }
 
 /* --------------------------------------------------------------------------
-   15. Print / PDF tweaks
+   18. Report footer
+   -------------------------------------------------------------------------- */
+.rcore-footer {
+  margin-top:     3.5rem;
+  padding:        1.2rem 1.8rem;
+  border-top:     2px solid var(--teal-light);
+  background:     linear-gradient(135deg, var(--teal-bg) 0%, #ffffff 100%);
+  border-radius:  0 0 var(--radius-lg) var(--radius-lg);
+  display:        flex;
+  align-items:    center;
+  justify-content: space-between;
+  flex-wrap:      wrap;
+  gap:            .5rem;
+  font-size:      .83em;
+  color:          var(--text-muted);
+}
+
+.rcore-footer-left {
+  display:     flex;
+  align-items: center;
+  gap:         .75rem;
+}
+
+.rcore-footer-badge {
+  display:          inline-flex;
+  align-items:      center;
+  gap:              .35rem;
+  background:       var(--teal-mid);
+  color:            white;
+  font-weight:      600;
+  font-size:        .80em;
+  padding:          .25em .7em;
+  border-radius:    20px;
+  letter-spacing:   .03em;
+  text-transform:   uppercase;
+}
+
+.rcore-footer-author {
+  font-weight: 600;
+  color:       var(--text-primary);
+}
+
+.rcore-footer-email a {
+  color:           var(--teal-mid);
+  font-weight:     500;
+  text-decoration: none;
+  border-bottom:   1px dotted var(--teal-light);
+  transition:      color .15s;
+}
+.rcore-footer-email a:hover { color: var(--rose-mid); }
+
+.rcore-footer-right {
+  font-size:  .80em;
+  color:      var(--text-subtle);
+  text-align: right;
+}
+
+.rcore-footer-right a {
+  color:       var(--teal-mid);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   19. Print / PDF tweaks
    -------------------------------------------------------------------------- */
 @media print {
-  pre, blockquote { page-break-inside: avoid; }
-  h1, h2, h3      { page-break-after:  avoid; }
-  #TOC            { display: none; }
+  body {
+    background-image: none;
+    background-color: white;
+  }
+  .main-container { box-shadow: none; border: none; }
+  pre, blockquote  { page-break-inside: avoid; }
+  h1, h2, h3       { page-break-after:  avoid; }
+  #TOC             { display: none; }
+  .rcore-footer    { border-top: 1px solid #ccc; background: none; }
 }
