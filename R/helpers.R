@@ -1,5 +1,5 @@
 .fix <- function(x){
-  x <- tolower(x) %>% str_replace_all(., "[[:punct:]]", "_")
+  x <- str_replace_all(tolower(x), "[[:punct:]]", "_")
   x <- str_replace_all(x, " ", "_")
   return(x)
 }
@@ -82,7 +82,7 @@ rcore_templates <- function(type="rnaseq", outpath=NULL, org=.rcore_org()){
   if (is.null(rcore_get_config())) {
     usethis::ui_info(paste0(
       "Tip: run {usethis::ui_code('rcore_setup()')} once to set your author ",
-      "name and org — templates will then be personalised automatically."
+      "name and org \u2014 templates will then be personalised automatically."
     ))
   }
   fs::dir_create(outpath)
@@ -143,6 +143,7 @@ read_pipeline_info <- function(nfcore){
   list(metadata=metadata, pipeline=pipeline)
 }
 
+#' @importFrom readr read_file write_file
 render_rmd <- function(infile, outfile, ls_data){
   whisker.render(read_file(infile),
                  ls_data) %>%
@@ -297,7 +298,7 @@ copy_templates <- function(path, pipeline, org=NULL){
       fs::dir_create(org_out)
       ui_info(paste0(
         "No org-specific templates found for {ui_value(org)}. ",
-        "An empty folder has been created at {ui_value(org_out)} — ",
+        "An empty folder has been created at {ui_value(org_out)} \u2014 ",
         "add your own org files there."
       ))
     }

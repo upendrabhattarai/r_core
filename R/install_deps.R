@@ -98,6 +98,7 @@
 #'
 #' @return Invisibly returns a list with elements `cran`, `bioc`, and
 #'   `github` listing what was attempted.
+#' @importFrom utils install.packages
 #' @export
 #'
 #' @examples

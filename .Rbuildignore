@@ -12,3 +12,4 @@ test/*
 inst/*/*/*/*/*/*html
 inst/*/*/*/*/*/*csv
 ^data-raw$
+^BIOCONDUCTOR_SUBMISSION\.md$

@@ -7,11 +7,11 @@
 #' into the current working directory.
 #'
 #' @return Invisibly returns the path to the downloaded files directory.
-#' @importFrom httr GET status_code content
-#' @importFrom jsonlite fromJSON
-#' @importFrom dplyr filter
 #' @export
 rcore_qc_chipseq_testdata <- function() {
+  if (!requireNamespace("httr",     quietly = TRUE)) stop("Package 'httr' is required. Install with: install.packages('httr')")
+  if (!requireNamespace("jsonlite", quietly = TRUE)) stop("Package 'jsonlite' is required. Install with: install.packages('jsonlite')")
+  if (!requireNamespace("dplyr",    quietly = TRUE)) stop("Package 'dplyr' is required. Install with: install.packages('dplyr')")
   api_url <- paste0(
     "https://api.github.com/repos/upendrabhattarai/rcore-test-data",
     "/contents/chipseq/bowtie2/mergedLibrary/macs2/narrowPeak"
