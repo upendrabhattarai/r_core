@@ -102,7 +102,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'   # Minimal install (just rcore itself works)
 #'   install_rcore_deps()
 #'

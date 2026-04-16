@@ -285,7 +285,7 @@ copy_templates <- function(path, pipeline, org=NULL){
   if (grepl("^https?://", repos)){
     deploy_repos(repos, path)
   }else{
-    analysis_template <- fs::path_package(base, parts)
+    analysis_template <- system.file(parts, package = base)
 
     ui_info("Getting templates from {ui_value(analysis_template)}")
     # ls_files <- grep("org", list.files(analysis_template, full.names = TRUE),
@@ -294,8 +294,10 @@ copy_templates <- function(path, pipeline, org=NULL){
     copy_files_in_folder(analysis_template, path)
   }
   if (!is.null(org)){
-    org_template <- fs::path_package(base, parts, "org", org)
-    if (fs::dir_exists(org_template)){
+    # system.file() returns "" if the path doesn't exist (unlike
+    # fs::path_package() which throws an error), so we can check safely.
+    org_template <- system.file(parts, "org", org, package = base)
+    if (nzchar(org_template) && fs::dir_exists(org_template)){
       ui_info("Getting templates from {ui_value(org_template)}")
       copy_files_in_folder(org_template, path, is_org=TRUE)
     } else {

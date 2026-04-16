@@ -35,9 +35,6 @@
 #'   rcore_setup(author = "Jane Smith",
 #'               email  = "jane@example.com",
 #'               org_abbr = "mylab")
-#'
-#'   # Interactive — prompts when called with no arguments
-#'   rcore_setup()
 #' }
 #' @export
 rcore_setup <- function(author = NULL, email = NULL, org_abbr = NULL) {
