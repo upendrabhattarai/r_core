@@ -23,12 +23,12 @@
 #'
 #' @export
 rcore_nfcore_check <- function(file){
-  required=c("sample","fastq_1","fastq_2","strandedness")
-  samplesheet=read_csv(file)
+  required <- c("sample","fastq_1","fastq_2","strandedness")
+  samplesheet <- read_csv(file)
 
   if (!(all(required %in% colnames(samplesheet)))){
-    print(colnames(samplesheet))
-    stop("Missing required columns ", paste(required, collapse = " "))
+    message(paste(colnames(samplesheet), collapse = ", "))
+    stop("Missing required columns: ", paste(required, collapse = ", "))
   }else if (any(grepl("^[1-9]", samplesheet[["sample"]]))){
     stop("Avoid samples starting with numbers ")
   }else if (any(grep("[^a-zA-Z0-9_]", samplesheet[["sample"]]))){
@@ -62,8 +62,12 @@ rcore_nfcore_check <- function(file){
 #'   org-specific template files.  Defaults to the abbreviation stored by
 #'   \code{\link{rcore_setup}}.
 #'
+#' @return When \code{type = "all"}, returns a character vector of available
+#'   analysis types.  Otherwise called for its side-effect of copying template
+#'   files; invisibly returns \code{NULL}.
+#'
 #' @examples
-#'  \dontrun{
+#'  \donttest{
 #'   path <- withr::local_tempdir()
 #'   rcore_templates(type="base", outpath=path)
 #'   fs::dir_ls(path, all=TRUE)
@@ -116,9 +120,10 @@ rcore_templates <- function(type="rnaseq", outpath=NULL, org=.rcore_org()){
            copy_templates(outpath, "multiomics", org)
          },
          {
-           stop(paste('project type not recognize, please choose: ',
-                      'rnaseq', 'peakseq',
-                      'singlecell','singlecell_delux','spatial'))
+           stop(
+             "project type not recognised, please choose: ",
+             "rnaseq, peakseq, singlecell, singlecell_delux, spatial"
+           )
          }
   )
 }
@@ -168,10 +173,11 @@ rcore_params <-function(nfcore_path, pipeline, metadata, copy){
 
 detect_gitignores <- function(path){
   gits <- fs::dir_ls(path, recurse = TRUE, regexp = 'gitignore')
-  sapply(gits, function(fn){
+  vapply(gits, function(fn){
     hidden <- file.path(dirname(fn), paste0(".", basename(fn)))
     fs::file_move(fn, hidden)
-  })
+    hidden
+  }, character(1))
 }
 
 copy_files_in_folder<- function(origin, remote, is_org=FALSE){
@@ -201,7 +207,7 @@ copy_files_in_folder<- function(origin, remote, is_org=FALSE){
 
 deploy_apps <- function(apps, path){
   fs::dir_create(file.path(path, "apps"))
-  sapply(names(apps), function(app){
+  for (app in names(apps)) {
     dest_file <- file.path(path, "apps", paste0(app, ".zip"))
     status <- tryCatch(
       download.file(url = apps[[app]], destfile = dest_file, quiet = TRUE),
@@ -217,7 +223,8 @@ deploy_apps <- function(apps, path){
       )
       fs::file_delete(dest_file)
     }
-  })
+  }
+  invisible(NULL)
 }
 
 deploy_repos <- function(repo_url, path){
@@ -245,33 +252,33 @@ deploy_repos <- function(repo_url, path){
 }
 
 copy_templates <- function(path, pipeline, org=NULL){
-  apps=list()
-  base = c("rcore")
-  repos = c("none")
+  apps <- list()
+  base <- c("rcore")
+  repos <- c("none")
   if (pipeline=="base"){
-    parts = c("templates/base")
+    parts <- c("templates/base")
   }else if(pipeline=="nf-core/rnaseq"){
-    parts = c("templates/rnaseq")
-    repos = "https://github.com/bcbio/rnaseq-reports/archive/refs/heads/main.zip"
-    names(repos)="rnaseq-reports"
+    parts <- c("templates/rnaseq")
+    repos <- "https://github.com/bcbio/rnaseq-reports/archive/refs/heads/main.zip"
+    names(repos) <- "rnaseq-reports"
   }else if(pipeline=="singlecell"){
-    parts = c("templates/singlecell")
-    repos = "https://github.com/bcbio/singlecell-reports/archive/refs/heads/main.zip"
-    names(repos)="singlecell-reports"
-    apps=c(apps, scRNAseq_qc="https://github.com/hbc/scRNAseq_qc_app/archive/refs/heads/main.zip")
+    parts <- c("templates/singlecell")
+    repos <- "https://github.com/bcbio/singlecell-reports/archive/refs/heads/main.zip"
+    names(repos) <- "singlecell-reports"
+    apps <- c(apps, scRNAseq_qc="https://github.com/hbc/scRNAseq_qc_app/archive/refs/heads/main.zip")
   # }else if(pipeline=="singlecell_delux"){
-  #   parts = c("templates/singlecell_delux")
+  #   parts <- c("templates/singlecell_delux")
   }else if(pipeline=="multiomics"){
-    parts = c("templates/multiomics")
+    parts <- c("templates/multiomics")
   }else if(pipeline=="spatial"){
-    # parts = c("templates/spatial")
-    repos = "https://github.com/bcbio/spatial-reports/archive/refs/heads/main.zip"
-    names(repos)="spatial-reports"
-    # apps=c(apps, SpatialViz="https://github.com/hbc/RShiny_app-SpatialViz/archive/refs/tags/Latest.zip")
+    # parts <- c("templates/spatial")
+    repos <- "https://github.com/bcbio/spatial-reports/archive/refs/heads/main.zip"
+    names(repos) <- "spatial-reports"
+    # apps <- c(apps, SpatialViz="https://github.com/hbc/RShiny_app-SpatialViz/archive/refs/tags/Latest.zip")
   }else if(pipeline=="peakseq"){
-    # parts = c("templates/chipseq") #https://github.com/bcbio/peakseq-reports
-    repos = "https://github.com/bcbio/peakseq-reports/archive/refs/heads/main.zip"
-    names(repos)="peakseq-reports"
+    # parts <- c("templates/chipseq") #https://github.com/bcbio/peakseq-reports
+    repos <- "https://github.com/bcbio/peakseq-reports/archive/refs/heads/main.zip"
+    names(repos) <- "peakseq-reports"
   }
 
   #check if it is url or folder
@@ -343,6 +350,10 @@ rcore_render <- function(path, pipeline, data){
 #' to use a custom library path for future session
 #' @param custom_lib_path path with a R library folder
 #' @param project_path project path
+#'
+#' @return Called for its side-effect of creating a \code{.Rprofile} file in
+#'   \code{project_path}.  Invisibly returns \code{NULL}.
+#'
 #' @examples
 #' path <- withr::local_tempdir()
 #' use_library(.libPaths(), path)

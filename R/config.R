@@ -31,7 +31,7 @@
 #'   and \code{org_abbr}.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'   rcore_setup(author = "Jane Smith",
 #'               email  = "jane@example.com",
 #'               org_abbr = "mylab")
@@ -105,9 +105,10 @@ rcore_setup <- function(author = NULL, email = NULL, org_abbr = NULL) {
 #'   \code{NULL}.
 #'
 #' @examples
-#' \dontrun{
-#'   rcore_get_config()
-#' }
+#' # Returns NULL if rcore_setup() has not been called yet
+#' cfg <- rcore_get_config()
+#' is.null(cfg) || is.list(cfg)  # TRUE either way
+#'
 #' @export
 rcore_get_config <- function() {
   config_path <- file.path(tools::R_user_dir("rcore", "config"), "config.dcf")

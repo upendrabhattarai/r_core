@@ -7,6 +7,13 @@
 #' into the current working directory.
 #'
 #' @return Invisibly returns the path to the downloaded files directory.
+#'
+#' @examples
+#' \donttest{
+#'   # Downloads narrowPeak files into the current working directory
+#'   rcore_qc_chipseq_testdata()
+#' }
+#'
 #' @export
 rcore_qc_chipseq_testdata <- function() {
   if (!requireNamespace("httr",     quietly = TRUE)) stop("Package 'httr' is required. Install with: install.packages('httr')")

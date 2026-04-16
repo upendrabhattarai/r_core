@@ -102,7 +102,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'   # Minimal install (just rcore itself works)
 #'   install_rcore_deps()
 #'
@@ -153,8 +153,11 @@ install_rcore_deps <- function(type = "core",
 
   # ---- Ensure BiocManager is available ----
   if (!requireNamespace("BiocManager", quietly = TRUE)) {
-    message("Installing BiocManager from CRAN...")
-    install.packages("BiocManager", repos = "https://cloud.r-project.org")
+    stop(
+      "Package 'BiocManager' is required but not installed.\n",
+      "Please install it first with:\n",
+      "  install.packages('BiocManager')"
+    )
   }
 
   # ---- Install CRAN packages ----
@@ -190,7 +193,11 @@ install_rcore_deps <- function(type = "core",
   # ---- Install GitHub-only packages ----
   if (length(pkgs_github) > 0) {
     if (!requireNamespace("remotes", quietly = TRUE)) {
-      install.packages("remotes", repos = "https://cloud.r-project.org")
+      stop(
+        "Package 'remotes' is required to install GitHub packages.\n",
+        "Please install it first with:\n",
+        "  install.packages('remotes')"
+      )
     }
     github_names <- sub(".*/", "", pkgs_github)
     need_gh <- pkgs_github[!vapply(github_names, requireNamespace,
@@ -217,7 +224,8 @@ install_rcore_deps <- function(type = "core",
 #'
 #' Prints a summary of all packages required for each analysis type.
 #'
-#' @return Invisibly returns the dependency list.
+#' @return Invisibly returns the dependency list as a named list, where each
+#'   element corresponds to an analysis type and contains the required packages.
 #' @export
 #'
 #' @examples

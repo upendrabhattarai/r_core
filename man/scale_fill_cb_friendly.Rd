@@ -2,19 +2,20 @@
 % Please edit documentation in R/cb_friendly.R
 \name{scale_fill_cb_friendly}
 \alias{scale_fill_cb_friendly}
-\title{use cb friendly colors as fill aesthetic with ggplot}
+\title{ggplot2 fill scale using rcore palette}
 \usage{
 scale_fill_cb_friendly(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 }
 \arguments{
-\item{palette}{name of the palette to be returned (main, cool, hot, grey, white_to_blue, or heatmap)}
+\item{palette}{See \code{\link[=cb_friendly_pal]{cb_friendly_pal()}}.}
 
-\item{discrete}{boolean, whether to make palette discretely divided into colors or continuous}
+\item{discrete}{Logical; discrete (\code{TRUE}, default) or continuous scale?}
 
-\item{reverse}{boolean, reverse order of colors in palette}
+\item{reverse}{Logical; reverse colour order? Default \code{FALSE}.}
 
-\item{...}{pass to ggplot}
+\item{...}{Passed to \code{\link[ggplot2:discrete_scale]{ggplot2::discrete_scale()}} or
+\code{\link[ggplot2:scale_gradient]{ggplot2::scale_fill_gradientn()}}.}
 }
 \description{
-use cb friendly colors as fill aesthetic with ggplot
+ggplot2 fill scale using rcore palette
 }

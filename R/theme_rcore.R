@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'   library(ggplot2)
 #'   ggplot(mtcars, aes(wt, mpg)) +
 #'     geom_point() +
@@ -102,7 +102,7 @@ theme_rcore <- function(base_size = 13, base_family = "sans", ...) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'   # In an R Markdown setup chunk:
 #'   # ```{r rcore-css, echo=FALSE, results='asis'}
 #'   # rcore::rcore_inject_css()

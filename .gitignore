@@ -22,3 +22,4 @@ inst/templates/chipseq/QC/QC.html
 *.html
 *.csv
 *.qs
+rcore.BiocCheck

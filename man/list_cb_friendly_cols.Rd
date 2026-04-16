@@ -2,10 +2,10 @@
 % Please edit documentation in R/cb_friendly.R
 \name{list_cb_friendly_cols}
 \alias{list_cb_friendly_cols}
-\title{list cb friendly colors}
+\title{List all rcore colorblind-friendly colours}
 \usage{
 list_cb_friendly_cols()
 }
 \description{
-list cb friendly colors
+Returns a named character vector of all available colours and their hex codes.
 }

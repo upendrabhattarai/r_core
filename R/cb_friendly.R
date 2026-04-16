@@ -36,6 +36,12 @@ cb_friendly_colors <- c(
 #'
 #' Returns a named character vector of all available colours and their hex codes.
 #'
+#' @return Named character vector of hex colour codes.
+#'
+#' @examples
+#' cols <- list_cb_friendly_cols()
+#' head(cols)
+#'
 #' @export
 list_cb_friendly_cols <- function() {
   return(cb_friendly_colors)
@@ -47,6 +53,11 @@ list_cb_friendly_cols <- function() {
 #'   Use [list_cb_friendly_cols()] to see all available names.
 #'
 #' @return Named character vector of hex colour codes.
+#'
+#' @examples
+#' cb_friendly_cols("teal")
+#' cb_friendly_cols("teal", "hot_pink", "amber")
+#'
 #' @export
 cb_friendly_cols <- function(...) {
   cols <- c(...)
@@ -100,6 +111,11 @@ cb_friendly_palettes <- list(
 #' @param ... Passed to [grDevices::colorRampPalette()].
 #'
 #' @return A colour-ramp function (as returned by [grDevices::colorRampPalette()]).
+#'
+#' @examples
+#' pal <- cb_friendly_pal("teal")
+#' pal(5)  # generate 5 colours from the teal palette
+#'
 #' @export
 cb_friendly_pal <- function(palette = "main", reverse = FALSE, ...) {
   pal <- cb_friendly_palettes[[palette]]
@@ -117,6 +133,16 @@ cb_friendly_pal <- function(palette = "main", reverse = FALSE, ...) {
 #' @param reverse Logical; reverse colour order? Default `FALSE`.
 #' @param ... Passed to [ggplot2::discrete_scale()] or
 #'   [ggplot2::scale_color_gradientn()].
+#'
+#' @return A ggplot2 Scale object.
+#'
+#' @examples
+#' \donttest{
+#'   library(ggplot2)
+#'   ggplot(mtcars, aes(wt, mpg, colour = factor(cyl))) +
+#'     geom_point() +
+#'     scale_color_cb_friendly()
+#' }
 #'
 #' @export
 scale_color_cb_friendly <- function(palette = "main", discrete = TRUE,
@@ -136,6 +162,16 @@ scale_color_cb_friendly <- function(palette = "main", discrete = TRUE,
 #' @param reverse Logical; reverse colour order? Default `FALSE`.
 #' @param ... Passed to [ggplot2::discrete_scale()] or
 #'   [ggplot2::scale_fill_gradientn()].
+#'
+#' @return A ggplot2 Scale object.
+#'
+#' @examples
+#' \donttest{
+#'   library(ggplot2)
+#'   ggplot(mtcars, aes(factor(cyl), mpg, fill = factor(cyl))) +
+#'     geom_boxplot() +
+#'     scale_fill_cb_friendly()
+#' }
 #'
 #' @export
 scale_fill_cb_friendly <- function(palette = "main", discrete = TRUE,

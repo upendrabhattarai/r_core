@@ -2,17 +2,21 @@
 % Please edit documentation in R/cb_friendly.R
 \name{cb_friendly_pal}
 \alias{cb_friendly_pal}
-\title{access cb friendly palette by name, reversing if necessary}
+\title{Build a colour-ramp palette function}
 \usage{
-cb_friendly_pal(palette = "main", reverse = F, ...)
+cb_friendly_pal(palette = "main", reverse = FALSE, ...)
 }
 \arguments{
-\item{palette}{name of the palette to be returned (main, cool, hot, grey, white_to_blue, or heatmap)}
+\item{palette}{Name of the palette: \code{"main"} (default), \code{"teal"}, \code{"rose"},
+\code{"cool"}, \code{"warm"}, \code{"grey"}, \code{"heatmap"}, or \code{"white_to_teal"}.}
 
-\item{reverse}{boolean, reverse order of colors in palette}
+\item{reverse}{Logical; reverse the colour order? Default \code{FALSE}.}
 
-\item{...}{pass to ggplot}
+\item{...}{Passed to \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}.}
+}
+\value{
+A colour-ramp function (as returned by \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}).
 }
 \description{
-access cb friendly palette by name, reversing if necessary
+Build a colour-ramp palette function
 }

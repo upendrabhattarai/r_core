@@ -2,13 +2,17 @@
 % Please edit documentation in R/cb_friendly.R
 \name{cb_friendly_cols}
 \alias{cb_friendly_cols}
-\title{fetch color from list by name}
+\title{Fetch one or more colours by name}
 \usage{
 cb_friendly_cols(...)
 }
 \arguments{
-\item{...}{list of color names}
+\item{...}{One or more colour names (unquoted or quoted strings).
+Use \code{\link[=list_cb_friendly_cols]{list_cb_friendly_cols()}} to see all available names.}
+}
+\value{
+Named character vector of hex colour codes.
 }
 \description{
-fetch color from list by name
+Fetch one or more colours by name
 }
