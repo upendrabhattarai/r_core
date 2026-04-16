@@ -1,7 +1,7 @@
 Package: rcore
 Type: Package
 Title: Templates and Utilities for nf-core Downstream Analysis and Visualization
-Version: 0.99.0
+Version: 0.1.0
 Authors@R: c(
     person("Bhattarai", "Upendra", , "upendrarajbhattarai@gmail.com",
            role = c("aut", "cre"),
@@ -18,12 +18,10 @@ Description: Provides a collection of R Markdown report templates, ggplot2
     any analyst or organisation can brand their own reports.  Originally
     developed at the Harvard Chan Bioinformatics Core.
 License: MIT + file LICENSE
-LazyData: false
+LazyData: true
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-biocViews: Software, Visualization, RNASeq, SingleCell, ChIPSeq, Spatial,
-    DNAMethylation, Sequencing, ReportWriting, WorkflowStep
 Imports:
     magrittr,
     grDevices,
@@ -43,9 +41,7 @@ Imports:
 Suggests:
     apeglm,
     Banksy,
-    BiocGenerics,
     BiocManager,
-    BiocStyle,
     caTools,
     CellChat,
     ChIPpeakAnno,
@@ -108,4 +104,4 @@ URL: https://github.com/upendrabhattarai/rcore
 BugReports: https://github.com/upendrabhattarai/rcore/issues
 Config/testthat/edition: 3
 Depends:
-    R (>= 4.5.0)
+    R (>= 4.1.0)
