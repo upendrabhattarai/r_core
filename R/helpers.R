@@ -48,6 +48,13 @@ rcore_nfcore_check <- function(file){
 #' have not run \code{rcore_setup()} yet, templates are deployed with the
 #' original "Harvard Chan Bioinformatics Core" author string.
 #'
+#' \strong{Destination routing:} pass the same \code{outpath} (your project
+#' root) for every call.  \code{type = "base"} deploys directly into
+#' \code{outpath}.  All analysis types (\code{"rnaseq"}, \code{"singlecell"},
+#' etc.) are automatically placed inside \code{outpath/reports/} — the
+#' sub-directory that the base template creates — so you never have to
+#' hard-code the reports path yourself.
+#'
 #' Org-specific files (e.g. custom README or checklist) are looked up in an
 #' \code{org/<abbr>/} sub-folder of the template directory.  The abbreviation
 #' defaults to the one stored by \code{\link{rcore_setup}}; supply \code{org}
@@ -57,7 +64,9 @@ rcore_nfcore_check <- function(file){
 #'   \code{"base"}, \code{"rnaseq"}, \code{"singlecell"},
 #'   \code{"singlecell_delux"}, \code{"spatial"}, \code{"peakseq"},
 #'   \code{"multiomics"}.  Use \code{"all"} to list available types.
-#' @param outpath string path indicating where to copy the files.
+#' @param outpath string; your project root directory.  For
+#'   \code{type = "base"} files are placed directly here.  For all other
+#'   types they are placed in \code{outpath/reports/}.
 #' @param org optional override for the org abbreviation used to look up
 #'   org-specific template files.  Defaults to the abbreviation stored by
 #'   \code{\link{rcore_setup}}.
@@ -70,7 +79,8 @@ rcore_nfcore_check <- function(file){
 #'  \donttest{
 #'   path <- withr::local_tempdir()
 #'   rcore_templates(type="base", outpath=path)
-#'   fs::dir_ls(path, all=TRUE)
+#'   rcore_templates(type="rnaseq", outpath=path)   # goes to path/reports/
+#'   fs::dir_ls(path, recurse=TRUE, all=TRUE)
 #'  }
 #' @export
 rcore_templates <- function(type="rnaseq", outpath=NULL, org=.rcore_org()){
@@ -89,35 +99,32 @@ rcore_templates <- function(type="rnaseq", outpath=NULL, org=.rcore_org()){
       "name and org \u2014 templates will then be personalised automatically."
     ))
   }
-  fs::dir_create(outpath)
+
+  # base deploys to the project root; all analysis types go into reports/
+  dest <- if (type == "base") outpath else file.path(outpath, "reports")
+
+  fs::dir_create(dest)
   switch(type,
          base={
-           #file.copy(fpath, outpath, recursive = TRUE)
-           copy_templates(outpath, "base", org)
+           copy_templates(dest, "base", org)
          },
          rnaseq={
-           #file.copy(fpath, outpath, recursive = TRUE)
-           copy_templates(outpath, "nf-core/rnaseq", org)
+           copy_templates(dest, "nf-core/rnaseq", org)
          },
          singlecell={
-           #file.copy(fpath, outpath, recursive = TRUE)
-           copy_templates(outpath, "singlecell", org)
+           copy_templates(dest, "singlecell", org)
          },
          singlecell_delux={
-           #file.copy(fpath, outpath, recursive = TRUE)
-           copy_templates(outpath, "singlecell_delux", org)
+           copy_templates(dest, "singlecell_delux", org)
          },
          spatial={
-           #file.copy(fpath, outpath, recursive = TRUE)
-           copy_templates(outpath, "spatial", org)
+           copy_templates(dest, "spatial", org)
          },
          peakseq={
-           #file.copy(fpath, outpath, recursive = TRUE)
-           copy_templates(outpath, "peakseq", org)
+           copy_templates(dest, "peakseq", org)
          },
          multiomics={
-           #file.copy(fpath, outpath, recursive = TRUE)
-           copy_templates(outpath, "multiomics", org)
+           copy_templates(dest, "multiomics", org)
          },
          {
            stop(

@@ -69,30 +69,22 @@ To update at any time just re-run `rcore_setup()` with the new values.
 
 ## Quick start
 
-### Set base project
+### Set up a new project
 
-use `setwd()` to set your current directory to the place where you want to work. The rcore functions will automatically write to whatever directory you have set.
+Point `outpath` at your project root and pass the same path for every call — rcore routes files to the right place automatically.
 
-```         
-setwd("/path/to/analysis/folder")
+```r
+path <- "/path/to/analysis/folder"
+
+# Creates the base project structure (README, metadata folder, etc.)
+rcore_templates(type = "base", outpath = path)
+
+# Analysis templates go automatically into path/reports/
+rcore_templates(type = "rnaseq",     outpath = path)
+rcore_templates(type = "singlecell", outpath = path)
 ```
 
-The following code will pop up a Rmd template will populate that folder with HCBC data structure guidelines
-
-```         
-path="/path/to/analysis/folder"
-rcore_templates(type="base", outpath=path)
-rcore_templates(type="rnaseq", outpath=path)
-rcore_templates(type="singlecell", outpath=path)
-```
-
-### Set RNAseq report folder
-
-This code will populate the folder with HCBC data structure guidelines and Rmd code: **You do not need to create a reports folder prior to running this code. This will create and populate the reports folder.**
-
-```         
-rcore_templates(type="rnaseq", outpath="/path/to/analysis/folder/reports")
-```
+`type = "base"` populates your project root directly. Every other type (`rnaseq`, `singlecell`, `spatial`, `peakseq`, `multiomics`) is placed inside the `reports/` sub-directory that the base template creates — you never have to type `path/reports` yourself.
 
 ## Supported analyses
 
