@@ -138,7 +138,7 @@ rcore_get_config <- function() {
   if (identical(author, "Harvard Chan Bioinformatics Core")) return(invisible(NULL))
 
   rmd_files <- tryCatch(
-    c(fs::dir_ls(path, recurse = TRUE, regexp = "\\.[Rr]md$")),
+    c(fs::dir_ls(path, recurse = TRUE, regexp = "\\.[Rr]md$|\\.[Qq]md$")),
     error = function(e) character(0)
   )
 
