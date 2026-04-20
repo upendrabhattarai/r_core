@@ -133,6 +133,75 @@ rcore_get_config <- function() {
   cfg[["author"]]
 }
 
+# Internal: replace grafify/kelly colour calls with rcore equivalents in all
+# Rmd/qmd files under `path`. Handles three patterns found in the bcbio
+# rnaseq-reports templates:
+#   1. scale_colour_discrete / scale_fill_discrete overrides using grafify kelly
+#   2. Explicit scale_color_grafify(palette = "kelly") calls
+#   3. Raw grafify:::graf_palettes[["kelly"]] vector references
+# Also swaps theme_prism for theme_rcore and removes the now-unneeded
+# library(grafify) / library(ggprism) calls.
+.patch_template_colors <- function(path) {
+  tmpl_files <- tryCatch(
+    c(fs::dir_ls(path, recurse = TRUE, regexp = "\\.[Rr]md$|\\.[Qq]md$")),
+    error = function(e) character(0)
+  )
+
+  for (f in tmpl_files) {
+    txt <- paste(readLines(f, warn = FALSE), collapse = "\n")
+    original <- txt
+
+    # 1. scale_colour_discrete function body using grafify kelly
+    txt <- gsub(
+      "scale_colour_discrete\\s*<-\\s*function\\s*\\(\\.\\.\\.\\)\\s*\\{[^}]+grafify[^}]+\\}",
+      "scale_colour_discrete <- function(...) rcore::scale_color_cb_friendly(...)",
+      txt, perl = TRUE
+    )
+
+    # 2. scale_fill_discrete function body using grafify kelly
+    txt <- gsub(
+      "scale_fill_discrete\\s*<-\\s*function\\s*\\(\\.\\.\\.\\)\\s*\\{[^}]+grafify[^}]+\\}",
+      "scale_fill_discrete   <- function(...) rcore::scale_fill_cb_friendly(...)",
+      txt, perl = TRUE
+    )
+
+    # 3. Explicit scale_color_grafify() calls (both named and positional arg)
+    txt <- gsub(
+      'scale_color_grafify\\(palette\\s*=\\s*"kelly"\\)',
+      "rcore::scale_color_cb_friendly()",
+      txt, perl = TRUE
+    )
+    txt <- gsub(
+      'scale_color_grafify\\("kelly"\\)',
+      "rcore::scale_color_cb_friendly()",
+      txt, perl = TRUE
+    )
+
+    # 4. Raw grafify kelly vector (used for catCols, l.col, colors, etc.)
+    txt <- gsub(
+      'grafify:::graf_palettes\\[\\["kelly"\\]\\]',
+      'unname(rcore::cb_friendly_pal("main")(20))',
+      txt, perl = TRUE
+    )
+
+    # 5. Replace theme_prism with theme_rcore
+    txt <- gsub(
+      "ggplot2::theme_set\\(theme_prism\\([^)]*\\)\\)",
+      "ggplot2::theme_set(rcore::theme_rcore())",
+      txt, perl = TRUE
+    )
+
+    # 6. Remove library(grafify) and library(ggprism) — no longer needed
+    txt <- gsub("^library\\(grafify\\)[[:blank:]]*\\n?", "", txt, perl = TRUE)
+    txt <- gsub("^library\\(ggprism\\)[[:blank:]]*\\n?",  "", txt, perl = TRUE)
+
+    if (!identical(txt, original)) {
+      writeLines(strsplit(txt, "\n", fixed = TRUE)[[1]], f)
+    }
+  }
+  invisible(NULL)
+}
+
 # Internal: replace hardcoded HBC author in all Rmd files under `path`
 .replace_author_in_templates <- function(path, author) {
   if (identical(author, "Harvard Chan Bioinformatics Core")) return(invisible(NULL))

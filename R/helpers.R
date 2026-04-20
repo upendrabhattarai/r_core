@@ -320,8 +320,10 @@ copy_templates <- function(path, pipeline, org=NULL){
     }
   }
 
-  # Personalise the author field in all deployed Rmd files
+  # Personalise the author field in all deployed Rmd/qmd files
   .replace_author_in_templates(path, .rcore_author())
+  # Replace grafify/kelly colour calls with rcore palette equivalents
+  .patch_template_colors(path)
 
   deploy_apps(apps, path)
 }
