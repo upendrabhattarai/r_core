@@ -261,37 +261,27 @@ deploy_repos <- function(repo_url, path){
 copy_templates <- function(path, pipeline, org=NULL){
   apps <- list()
   base <- c("rcore")
-  repos <- c("none")
+
   if (pipeline=="base"){
     parts <- c("templates/base")
   }else if(pipeline=="nf-core/rnaseq"){
     parts <- c("templates/rnaseq")
-    repos <- "https://github.com/bcbio/rnaseq-reports/archive/refs/heads/main.zip"
-    names(repos) <- "rnaseq-reports"
   }else if(pipeline=="singlecell"){
     parts <- c("templates/singlecell")
-    repos <- "https://github.com/bcbio/singlecell-reports/archive/refs/heads/main.zip"
-    names(repos) <- "singlecell-reports"
-    apps <- c(apps, scRNAseq_qc="https://github.com/hbc/scRNAseq_qc_app/archive/refs/heads/main.zip")
-  # }else if(pipeline=="singlecell_delux"){
-  #   parts <- c("templates/singlecell_delux")
   }else if(pipeline=="multiomics"){
     parts <- c("templates/multiomics")
   }else if(pipeline=="spatial"){
-    # parts <- c("templates/spatial")
-    repos <- "https://github.com/bcbio/spatial-reports/archive/refs/heads/main.zip"
-    names(repos) <- "spatial-reports"
-    # apps <- c(apps, SpatialViz="https://github.com/hbc/RShiny_app-SpatialViz/archive/refs/tags/Latest.zip")
+    parts <- c("templates/spatial")
   }else if(pipeline=="peakseq"){
-    # parts <- c("templates/chipseq") #https://github.com/bcbio/peakseq-reports
-    repos <- "https://github.com/bcbio/peakseq-reports/archive/refs/heads/main.zip"
-    names(repos) <- "peakseq-reports"
+    parts <- c("templates/peakseq")
+  }else if(pipeline=="singlecell_delux"){
+    parts <- c("templates/singlecell_delux")
+  }else{
+    parts <- NULL
   }
 
-  #check if it is url or folder
-  if (grepl("^https?://", repos)){
-    deploy_repos(repos, path)
-  }else{
+  # All templates are now bundled locally in inst/templates/
+  if (!is.null(parts)) {
     analysis_template <- system.file(parts, package = base)
 
     ui_info("Getting templates from {ui_value(analysis_template)}")
@@ -324,8 +314,6 @@ copy_templates <- function(path, pipeline, org=NULL){
   .replace_author_in_templates(path, .rcore_author())
   # Replace grafify/kelly colour calls with rcore palette equivalents
   .patch_template_colors(path)
-
-  deploy_apps(apps, path)
 }
 
 rcore_render <- function(path, pipeline, data){

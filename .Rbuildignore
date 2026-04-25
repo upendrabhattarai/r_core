@@ -14,3 +14,4 @@ inst/*/*/*/*/*/*csv
 ^data-raw$
 ^BIOCONDUCTOR_SUBMISSION\.md$
 ^rcore\.BiocCheck$
+^tools$
