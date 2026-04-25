@@ -44,18 +44,21 @@ rcore::list_rcore_deps()
 
 ## First-time setup
 
-After installing, run this **once** to personalise your reports with your name and contact details:
+After installing, run this **once** to personalise your reports with your name and organization:
 
 ```r
 library(rcore)
 rcore_setup(
   author   = "Your Name",
   email    = "you@example.com",
-  org_abbr = "mylab"          # short lowercase tag for your org folder
+  org_name = "Center for Translational Neuroscience"
 )
 ```
 
-`rcore_setup()` saves your details to a user-level config file (not inside the package) so you only need to do this once per machine. After that, every template you deploy will automatically have your name in the `author:` field, and every rendered HTML report will show a footer with your name and a mailto link.
+`rcore_setup()` saves your details to a user-level config file (not inside the package) so you only need to do this once per machine. The org folder abbreviation is derived automatically from the initials of each word in `org_name` — for example, `"Center for Translational Neuroscience"` becomes `"cftn"`. After setup:
+
+- Every deployed template will show the **full organization name** in the `author:` field.
+- Every rendered HTML report will show a footer with your **personal name** and a mailto link.
 
 To check what's stored:
 

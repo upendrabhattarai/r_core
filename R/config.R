@@ -6,44 +6,47 @@
 
 #' Set up rcore with your author and organization details
 #'
-#' Run this once after installing rcore.  The name, email, and abbreviation you
-#' provide are stored in a user-level config file and used automatically in:
+#' Run this once after installing rcore.  Your personal name, contact email,
+#' and full organization name are stored in a user-level config file and used
+#' automatically in:
 #' \itemize{
-#'   \item The \code{author:} field of every Rmd template deployed by
-#'         \code{\link{rcore_templates}}.
-#'   \item The footer of every rendered HTML report (author name + contact
-#'         email injected by \code{\link{rcore_inject_css}}).
-#'   \item The default \code{org} folder lookup inside template directories
-#'         (replaces the hard-coded \code{"hcbc"} default).
+#'   \item The \code{author:} field of every template deployed by
+#'         \code{\link{rcore_templates}} — filled with the full organization
+#'         name.
+#'   \item The footer of every rendered HTML report (personal author name +
+#'         contact email injected by \code{\link{rcore_inject_css}}).
+#'   \item The org-specific template sub-folder lookup — the abbreviation is
+#'         derived automatically from the initials of each word in
+#'         \code{org_name} (e.g. \code{"Center for Translational Neuroscience"}
+#'         becomes \code{"ctn"}).
 #' }
 #'
-#' @param author Full author or organization name that will appear in report
-#'   YAML headers and the report footer (e.g. \code{"Jane Smith"} or
-#'   \code{"Awesome Bioinformatics Lab"}).
+#' @param author Your personal full name shown in the report footer
+#'   (e.g. \code{"Jane Smith"}).
 #' @param email Contact email address shown in the report footer.  Leave
 #'   \code{NULL} to be prompted interactively, or supply \code{""} to omit the
 #'   email from footers.
-#' @param org_abbr Short lower-case abbreviation used to match org-specific
-#'   template sub-folders (e.g. \code{"mylab"}).  Defaults to the first 8
-#'   alphanumeric characters of \code{author} if left \code{NULL}.
+#' @param org_name Full organization name that will appear in the
+#'   \code{author:} field of every deployed template
+#'   (e.g. \code{"Awesome Bioinformatics Lab"}).  Leave \code{NULL} to be
+#'   prompted interactively.  The abbreviation used for template folder lookup
+#'   is derived automatically from the initials of each word.
 #'
 #' @return Invisibly returns a named list with \code{author}, \code{email},
-#'   and \code{org_abbr}.
+#'   \code{org_name}, and \code{org_abbr}.
 #'
 #' @examples
 #' \donttest{
-#'   rcore_setup(author = "Jane Smith",
-#'               email  = "jane@example.com",
-#'               org_abbr = "mylab")
+#'   rcore_setup(author   = "Jane Smith",
+#'               email    = "jane@example.com",
+#'               org_name = "Awesome Bioinformatics Lab")
 #' }
 #' @export
-rcore_setup <- function(author = NULL, email = NULL, org_abbr = NULL) {
+rcore_setup <- function(author = NULL, email = NULL, org_name = NULL) {
 
-  # ---- author ---------------------------------------------------------------
+  # ---- personal author ------------------------------------------------------
   if (is.null(author)) {
-    author <- readline(
-      "Author / organization name (shown in report headers): "
-    )
+    author <- trimws(readline("Your full name (shown in report footer): "))
   }
   author <- trimws(author)
   if (nchar(author) == 0L)
@@ -51,20 +54,21 @@ rcore_setup <- function(author = NULL, email = NULL, org_abbr = NULL) {
 
   # ---- email ----------------------------------------------------------------
   if (is.null(email)) {
-    entered_email <- trimws(readline("Contact email (shown in report footer, leave blank to skip): "))
-    email <- entered_email
+    email <- trimws(readline("Contact email (shown in report footer, leave blank to skip): "))
   }
 
-  # ---- org abbreviation -----------------------------------------------------
-  if (is.null(org_abbr)) {
-    default_abbr <- substr(tolower(gsub("[^a-zA-Z0-9]", "", author)), 1L, 8L)
-    prompt <- sprintf(
-      "Short org abbreviation for template folders [%s]: ", default_abbr
-    )
-    entered <- trimws(readline(prompt))
-    org_abbr <- if (nchar(entered) == 0L) default_abbr else entered
+  # ---- organization name ----------------------------------------------------
+  if (is.null(org_name)) {
+    org_name <- trimws(readline("Full organization name (shown as author in templates): "))
   }
-  org_abbr <- tolower(gsub("[^a-zA-Z0-9_]", "", org_abbr))
+  org_name <- trimws(org_name)
+  if (nchar(org_name) == 0L)
+    stop("Organization name cannot be empty.")
+
+  # ---- derive abbreviation from initials of each word ----------------------
+  words     <- strsplit(org_name, "\\s+")[[1L]]
+  org_abbr  <- tolower(paste(substr(words, 1L, 1L), collapse = ""))
+  org_abbr  <- gsub("[^a-z0-9]", "", org_abbr)   # keep only alphanumeric
 
   # ---- write config ---------------------------------------------------------
   config_dir  <- tools::R_user_dir("rcore", "config")
@@ -74,32 +78,35 @@ rcore_setup <- function(author = NULL, email = NULL, org_abbr = NULL) {
   write.dcf(
     data.frame(Author  = author,
                Email   = email,
+               OrgName = org_name,
                OrgAbbr = org_abbr,
                stringsAsFactors = FALSE),
     file = config_path
   )
 
   usethis::ui_done("rcore configured")
-  usethis::ui_info("  Author : {usethis::ui_value(author)}")
+  usethis::ui_info("  Author   : {usethis::ui_value(author)}")
   if (nchar(email) > 0L)
-    usethis::ui_info("  Email  : {usethis::ui_value(email)}")
-  usethis::ui_info("  Org    : {usethis::ui_value(org_abbr)}")
-  usethis::ui_info("  Saved  : {usethis::ui_value(config_path)}")
+    usethis::ui_info("  Email    : {usethis::ui_value(email)}")
+  usethis::ui_info("  Org name : {usethis::ui_value(org_name)}")
+  usethis::ui_info("  Org abbr : {usethis::ui_value(org_abbr)}  (derived from initials)")
+  usethis::ui_info("  Saved    : {usethis::ui_value(config_path)}")
   usethis::ui_info(paste0(
     "Templates deployed with rcore_templates() will now use ",
-    "{usethis::ui_value(author)} as the report author."
+    "{usethis::ui_value(org_name)} as the report author."
   ))
 
-  invisible(list(author = author, email = email, org_abbr = org_abbr))
+  invisible(list(author = author, email = email,
+                 org_name = org_name, org_abbr = org_abbr))
 }
 
 #' View the current rcore configuration
 #'
-#' Returns the author and org abbreviation stored by \code{\link{rcore_setup}}.
+#' Returns the configuration stored by \code{\link{rcore_setup}}.
 #' Returns \code{NULL} silently if no configuration has been set yet.
 #'
-#' @return A named list with elements \code{author} and \code{org_abbr}, or
-#'   \code{NULL}.
+#' @return A named list with elements \code{author}, \code{email},
+#'   \code{org_name}, and \code{org_abbr}, or \code{NULL}.
 #'
 #' @examples
 #' # Returns NULL if rcore_setup() has not been called yet
@@ -126,11 +133,13 @@ rcore_get_config <- function() {
   cfg[["orgabbr"]]
 }
 
-# Internal: stored author name, or the original HBC credit as fallback
+# Internal: full org name for template author field, or HBC as fallback
 .rcore_author <- function() {
   cfg <- rcore_get_config()
   if (is.null(cfg)) return("Harvard Chan Bioinformatics Core")
-  cfg[["author"]]
+  # Use full org name if available; fall back to personal author name
+  org <- cfg[["orgname"]]
+  if (!is.null(org) && nzchar(org)) org else cfg[["author"]]
 }
 
 # Internal: replace grafify/kelly colour calls with rcore equivalents in all
