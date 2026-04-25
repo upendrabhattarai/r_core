@@ -7,7 +7,8 @@
 list_rcore_deps()
 }
 \value{
-Invisibly returns the dependency list.
+Invisibly returns the dependency list as a named list, where each
+element corresponds to an analysis type and contains the required packages.
 }
 \description{
 Prints a summary of all packages required for each analysis type.

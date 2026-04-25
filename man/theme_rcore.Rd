@@ -21,7 +21,7 @@ A clean, modern ggplot2 theme for rcore HTML reports.
 Uses teal and rose accent colours consistent with the rcore colour palette.
 }
 \examples{
-\dontrun{
+\donttest{
   library(ggplot2)
   ggplot(mtcars, aes(wt, mpg)) +
     geom_point() +

@@ -20,3 +20,8 @@ A colour-ramp function (as returned by \code{\link[grDevices:colorRamp]{grDevice
 \description{
 Build a colour-ramp palette function
 }
+\examples{
+pal <- cb_friendly_pal("teal")
+pal(5)  # generate 5 colours from the teal palette
+
+}

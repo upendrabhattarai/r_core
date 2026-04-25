@@ -21,6 +21,18 @@ scale_color_cb_friendly(
 \item{...}{Passed to \code{\link[ggplot2:discrete_scale]{ggplot2::discrete_scale()}} or
 \code{\link[ggplot2:scale_gradient]{ggplot2::scale_color_gradientn()}}.}
 }
+\value{
+A ggplot2 Scale object.
+}
 \description{
 ggplot2 colour scale using rcore palette
+}
+\examples{
+\donttest{
+  library(ggplot2)
+  ggplot(mtcars, aes(wt, mpg, colour = factor(cyl))) +
+    geom_point() +
+    scale_color_cb_friendly()
+}
+
 }

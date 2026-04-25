@@ -6,6 +6,14 @@
 \usage{
 list_cb_friendly_cols()
 }
+\value{
+Named character vector of hex colour codes.
+}
 \description{
 Returns a named character vector of all available colours and their hex codes.
+}
+\examples{
+cols <- list_cb_friendly_cols()
+head(cols)
+
 }

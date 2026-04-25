@@ -16,6 +16,18 @@ scale_fill_cb_friendly(palette = "main", discrete = TRUE, reverse = FALSE, ...)
 \item{...}{Passed to \code{\link[ggplot2:discrete_scale]{ggplot2::discrete_scale()}} or
 \code{\link[ggplot2:scale_gradient]{ggplot2::scale_fill_gradientn()}}.}
 }
+\value{
+A ggplot2 Scale object.
+}
 \description{
 ggplot2 fill scale using rcore palette
+}
+\examples{
+\donttest{
+  library(ggplot2)
+  ggplot(mtcars, aes(factor(cyl), mpg, fill = factor(cyl))) +
+    geom_boxplot() +
+    scale_fill_cb_friendly()
+}
+
 }

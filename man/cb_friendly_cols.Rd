@@ -16,3 +16,8 @@ Named character vector of hex colour codes.
 \description{
 Fetch one or more colours by name
 }
+\examples{
+cb_friendly_cols("teal")
+cb_friendly_cols("teal", "hot_pink", "amber")
+
+}

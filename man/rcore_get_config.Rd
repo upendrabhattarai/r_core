@@ -15,7 +15,8 @@ Returns the author and org abbreviation stored by \code{\link{rcore_setup}}.
 Returns \code{NULL} silently if no configuration has been set yet.
 }
 \examples{
-\dontrun{
-  rcore_get_config()
-}
+# Returns NULL if rcore_setup() has not been called yet
+cfg <- rcore_get_config()
+is.null(cfg) || is.list(cfg)  # TRUE either way
+
 }

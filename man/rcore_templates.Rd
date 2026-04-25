@@ -12,11 +12,18 @@ rcore_templates(type = "rnaseq", outpath = NULL, org = .rcore_org())
 \code{"singlecell_delux"}, \code{"spatial"}, \code{"peakseq"},
 \code{"multiomics"}.  Use \code{"all"} to list available types.}
 
-\item{outpath}{string path indicating where to copy the files.}
+\item{outpath}{string; your project root directory.  For
+\code{type = "base"} files are placed directly here.  For all other
+types they are placed in \code{outpath/reports/}.}
 
 \item{org}{optional override for the org abbreviation used to look up
 org-specific template files.  Defaults to the abbreviation stored by
 \code{\link{rcore_setup}}.}
+}
+\value{
+When \code{type = "all"}, returns a character vector of available
+analysis types.  Otherwise called for its side-effect of copying template
+files; invisibly returns \code{NULL}.
 }
 \description{
 Copies Rmd reports, R scripts, and supporting files for a given analysis
@@ -26,15 +33,23 @@ have not run \code{rcore_setup()} yet, templates are deployed with the
 original "Harvard Chan Bioinformatics Core" author string.
 }
 \details{
+\strong{Destination routing:} pass the same \code{outpath} (your project
+root) for every call.  \code{type = "base"} deploys directly into
+\code{outpath}.  All analysis types (\code{"rnaseq"}, \code{"singlecell"},
+etc.) are automatically placed inside \code{outpath/reports/} — the
+sub-directory that the base template creates — so you never have to
+hard-code the reports path yourself.
+
 Org-specific files (e.g. custom README or checklist) are looked up in an
 \code{org/<abbr>/} sub-folder of the template directory.  The abbreviation
 defaults to the one stored by \code{\link{rcore_setup}}; supply \code{org}
 explicitly only when you want to override it for a single call.
 }
 \examples{
- \dontrun{
+ \donttest{
   path <- withr::local_tempdir()
   rcore_templates(type="base", outpath=path)
-  fs::dir_ls(path, all=TRUE)
+  rcore_templates(type="rnaseq", outpath=path)   # goes to path/reports/
+  fs::dir_ls(path, recurse=TRUE, all=TRUE)
  }
 }

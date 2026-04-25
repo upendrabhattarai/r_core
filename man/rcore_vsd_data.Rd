@@ -7,7 +7,10 @@
 \format{
 \subsection{\code{rcore_vsd_data}}{
 
-VSD object from DESeq2 data
+A \code{DESeqTransform} (VSD) object produced by
+\code{DESeq2::varianceStabilizingTransformation()}, containing normalised
+count data for 500 genes across 6 samples.  Useful for testing
+visualisation functions without loading a full DESeq2 workflow.
 }
 }
 \usage{

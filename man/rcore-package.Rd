@@ -11,8 +11,8 @@ Provides a collection of R Markdown report templates, ggplot2 themes, colorblind
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/upendrabhattarai/r_core}
-  \item Report bugs at \url{https://github.com/upendrabhattarai/r_core/issues}
+  \item \url{https://github.com/upendrabhattarai/rcore}
+  \item Report bugs at \url{https://github.com/upendrabhattarai/rcore/issues}
 }
 
 }

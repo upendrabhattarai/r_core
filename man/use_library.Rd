@@ -11,6 +11,10 @@ use_library(custom_lib_path, project_path = ".")
 
 \item{project_path}{project path}
 }
+\value{
+Called for its side-effect of creating a \code{.Rprofile} file in
+\code{project_path}.  Invisibly returns \code{NULL}.
+}
 \description{
 This function will create the .Rprofile file in a project path
 to use a custom library path for future session

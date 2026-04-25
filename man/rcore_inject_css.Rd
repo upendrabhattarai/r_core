@@ -22,7 +22,7 @@ config has been set, the footer is omitted silently.
 }
 }
 \examples{
-\dontrun{
+\donttest{
   # In an R Markdown setup chunk:
   # ```{r rcore-css, echo=FALSE, results='asis'}
   # rcore::rcore_inject_css()

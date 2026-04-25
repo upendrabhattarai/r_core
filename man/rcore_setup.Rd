@@ -36,12 +36,9 @@ email injected by \code{\link{rcore_inject_css}}).
 }
 }
 \examples{
-\dontrun{
+\donttest{
   rcore_setup(author = "Jane Smith",
               email  = "jane@example.com",
               org_abbr = "mylab")
-
-  # Interactive — prompts when called with no arguments
-  rcore_setup()
 }
 }
