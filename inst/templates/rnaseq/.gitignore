@@ -1,0 +1,13 @@
+.DS_Store
+.Rproj.user
+*.Rproj
+.Rhistory
+# pixi environments
+.pixi
+*.egg-info
+
+# Ignore Results
+**/*.html
+**html
+**csv
+**rds

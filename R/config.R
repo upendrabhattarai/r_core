@@ -202,10 +202,9 @@ rcore_get_config <- function() {
   invisible(NULL)
 }
 
-# Internal: replace hardcoded HBC author in all Rmd files under `path`
+# Internal: replace the {{rcore_author}} placeholder in all deployed Rmd/qmd
+# files under `path` with the stored author name.
 .replace_author_in_templates <- function(path, author) {
-  if (identical(author, "Harvard Chan Bioinformatics Core")) return(invisible(NULL))
-
   rmd_files <- tryCatch(
     c(fs::dir_ls(path, recurse = TRUE, regexp = "\\.[Rr]md$|\\.[Qq]md$")),
     error = function(e) character(0)
@@ -214,9 +213,9 @@ rcore_get_config <- function() {
   for (f in rmd_files) {
     txt <- readLines(f, warn = FALSE)
     updated <- gsub(
-      'author: "Harvard Chan Bioinformatics Core"',
-      sprintf('author: "%s"', author),
-      txt, fixed = TRUE
+      "\\{\\{rcore_author\\}\\}",
+      author,
+      txt, perl = TRUE
     )
     if (!identical(txt, updated)) writeLines(updated, f)
   }

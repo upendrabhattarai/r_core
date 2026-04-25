@@ -1,7 +1,7 @@
 ---
 title: "Quality Control TEAseq"
 title: "Differential Expression"
-author: "Harvard Chan Bioinformatics Core"
+author: "{{rcore_author}}"
 date: "`r Sys.Date()`"
 output:
    html_document:
